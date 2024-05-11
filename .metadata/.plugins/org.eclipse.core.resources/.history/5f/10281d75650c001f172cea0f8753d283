@@ -1,0 +1,9 @@
+package dao;
+
+import java.util.List;
+
+import Entities.HoaDon;
+
+public interface HoaDon_DAO {
+	public List<HoaDon> findAll();
+}

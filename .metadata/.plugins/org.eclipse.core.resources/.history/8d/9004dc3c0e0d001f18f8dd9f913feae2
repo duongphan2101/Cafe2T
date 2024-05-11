@@ -1,0 +1,60 @@
+package Entities;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "ThucDon")
+public class ThucDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maTD;
+    private double donGia;
+    private String tenThucDon;
+    
+    @ManyToOne
+    private HoaDon hoaDon;
+
+	public ThucDon() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ThucDon(String maTD, double donGia, String tenThucDon) {
+		super();
+		this.maTD = maTD;
+		this.donGia = donGia;
+		this.tenThucDon = tenThucDon;
+	}
+	public String getMaTD() {
+		return maTD;
+	}
+	public void setMaTD(String maTD) {
+		this.maTD = maTD;
+	}
+	public double getDonGia() {
+		return donGia;
+	}
+	public void setDonGia(double donGia) {
+		this.donGia = donGia;
+	}
+	public String getTenThucDon() {
+		return tenThucDon;
+	}
+	public void setTenThucDon(String tenThucDon) {
+		this.tenThucDon = tenThucDon;
+	}
+
+	@Override
+	public String toString() {
+		return "ThucDon [maTD=" + maTD + ", donGia=" + donGia + ", tenThucDon=" + tenThucDon + "]";
+	}
+
+}

@@ -1,0 +1,76 @@
+package Client_dao;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
+
+import Entities.ThucDon;
+
+public class Client_ThucDon_dao {
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	
+	 public Client_ThucDon_dao(Socket socket) throws IOException {
+		out = new ObjectOutputStream(socket.getOutputStream());
+		in = new ObjectInputStream(socket.getInputStream());
+	}
+	 
+	 public List<ThucDon> getaAlTD() throws IOException, ClassNotFoundException{
+		 out.writeUTF("getAllThucDon");
+		 out.flush();
+		 
+		 List<ThucDon> td = (List<ThucDon>) in.readObject();
+		return td;
+		 
+	 }
+	 
+	 
+	 
+	 public String getNextmaThucDon() throws IOException {
+		 out.writeUTF("getNextMaThucDon");
+		 out.flush();
+		 
+		 String newMa = in.readUTF();		 
+		return newMa;
+	 }
+	 
+	 public void xoaThucDon(String maTD) throws IOException {
+		 out.writeUTF("XoaThucDon");	
+		 out.flush();
+		 
+		 out.writeUTF(maTD);
+		 out.flush();
+	 }
+	 
+	 public void UpdateThucDon(ThucDon thucDon) throws IOException {
+		 out.writeUTF("UpdateThucDon");	
+		 out.flush();
+		 
+		 out.writeObject(thucDon);
+		 out.flush();
+	 }
+	 
+	 public void AddThucDon(ThucDon thucDon) throws IOException {
+		 out.writeUTF("ThemThucDon");	
+		 out.flush();
+		 
+		 out.writeObject(thucDon);
+		 out.flush(); 
+	 }
+	 
+	 public ThucDon getThucDonByID(String maTD) throws IOException, ClassNotFoundException {
+		 out.writeUTF("GetThucDonByID");
+		 out.flush();
+		 
+		 out.writeUTF(maTD);
+		 out.flush();
+		 
+		 ThucDon td = (ThucDon) in.readObject();
+		 
+		return td;
+	 }
+	 
+	 
+}

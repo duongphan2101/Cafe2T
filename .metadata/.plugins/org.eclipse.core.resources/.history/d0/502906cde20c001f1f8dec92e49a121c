@@ -1,0 +1,80 @@
+package handle;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import Entities.NhanVien;
+import dao.NhanVien_DAO;
+
+public class HandleNhanVien {
+	
+	 public void loadTable() {
+	    	NhanVien_DAO nvdao = new NhanVien_DAO();
+	    	List<NhanVien> nvs = nvdao.getAllNhanVien();
+			model.setRowCount(0);
+				for(NhanVien nv :nvs ) {
+					 Object [] data = {nv.getMaNV(), nv.getTenNV(), nv.getGioiTinh(), nv.getNgaySinh(), nv.getSDT(), nv.getCMND()
+			            		, nv.getDiaChi(), nv.getTrangThaiLamViec()};
+			            model.addRow(data);
+
+			}
+		}
+
+	    
+	    public void themNhanVien() {
+	    	String maNV,tenNV,namSinh,CCCD,SDT,diaChi,maTK,MK,email;
+	    	String TTLV = "";
+	    	String gioiTinh = "";
+	    	maNV = txt_ma.getText().toString();
+	    	tenNV = txt_ten.getText().toString();
+	    	if (rd_nam != null && rd_nam.isSelected()) {
+	    		gioiTinh = rd_nam.getText().toString();
+		    }
+		    if (rd_nu != null && rd_nu.isSelected()) {
+		    	gioiTinh = rd_nu.getText().toString();
+		    }
+		    
+			 Date selectedDate = dateChooser.getDate();
+			 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			 namSinh = dateFormat.format(selectedDate);
+			 CCCD = txt_cccd.getText().toString();
+
+
+			 TTLV = text_TTLV.getText().toString();
+
+			 SDT = txt_sdt.getText().toString();
+			 diaChi = txt_dc.getText().toString();
+			 maTK = txt_maTK.getText().toString();
+			 MK = text_MK.getText().toString();
+			 email = textField_Email.getText().toString();
+			 
+//			 System.out.println(maNV + tenNV + gioiTinh + namSinh + CCCD  + SDT + TTLV + diaChi + maTK + MK + email);
+			 
+	    	NhanVien_DAO insertDao = new NhanVien_DAO();
+			NhanVien nhanVien = new NhanVien(maNV,tenNV ,gioiTinh ,namSinh, CCCD, SDT, TTLV, diaChi, maTK, MK, email);
+			insertDao.insertNhanVien(nhanVien);
+			Object [] rowData = {maNV,tenNV ,gioiTinh ,namSinh, CCCD, SDT, TTLV, diaChi, maTK, MK, email};
+			model.addRow(rowData);
+			JOptionPane.showMessageDialog(this, "Thêm Nhân Viên Thành Công");
+			loadTable();
+			lamMoi();
+	    }
+	    
+	    
+	    public void lamMoi() {
+	    	
+	    	txt_ma.setText("");
+	    	txt_ten.setText("");
+			text_TTLV.setText("");
+			txt_sdt.setText("");
+			txt_dc.setText("");
+			txt_maTK.setText("");
+			text_MK.setText("");
+			textField_Email.setText("");
+			txt_cccd.setText("");
+			dateChooser.setDate(null);
+	    }
+}

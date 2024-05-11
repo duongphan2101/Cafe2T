@@ -1,0 +1,775 @@
+package GiaoDien;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.BorderLayout;
+import javax.swing.UIManager;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JRadioButton;
+import com.toedter.calendar.JDateChooser;
+
+import Client_dao.Client_NhanVien_dao;
+import Entities.NhanVien;
+import dao.NhanVien_DAO;
+
+import javax.swing.ScrollPaneConstants;
+
+
+
+public class QL_NhanVien extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JLabel lblClock;
+	private Timer timer;
+	
+	private JTable table;
+	DefaultTableModel model;
+	private JTextField txt_ma;
+	private JTextField txt_ten;
+	private JTextField txt_sdt;
+	private JTextField txt_cccd;
+	private JTextField txt_dc;
+	private JTextField txt_maTK;
+	private JTextField textField_Email;
+	private JTextField text_MK;
+	private ButtonGroup gioiTinhGroup;
+	private JRadioButton rd_nam;
+	private JRadioButton rd_nu;
+	private JDateChooser dateChooser;
+	private JTextField text_TTLV;
+	String name = User.getTenNhanVien();
+	private Client_NhanVien_dao nvdao;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					QL_NhanVien frame = new QL_NhanVien();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws UnknownHostException 
+	 */
+	public QL_NhanVien() throws UnknownHostException, ClassNotFoundException, IOException {
+		setType(Type.UTILITY);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+
+		setBackground(Color.WHITE);
+		setTitle("EMPLOYEE");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setBounds(100, 100, 1175, 650);
+		setResizable(false);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(null);
+
+		
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel content = new JPanel();
+		content.setBounds(215, 96, 946, 517);
+		contentPane.add(content);
+		content.setLayout(null);
+		
+		JPanel input_NhanVien = new JPanel();
+		input_NhanVien.setBackground(new Color(255, 255, 255));
+		input_NhanVien.setBounds(580, 0, 366, 517);
+		content.add(input_NhanVien);
+		input_NhanVien.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("Thông Tin Nhân Viên");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 28));
+		lblNewLabel_1.setBounds(0, 5, 366, 30);
+		input_NhanVien.add(lblNewLabel_1);
+		
+		txt_ma = new JTextField();
+		txt_ma.setEditable(false);
+		txt_ma.setEnabled(false);
+		txt_ma.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txt_ma.setBounds(20, 102, 100, 20);
+		input_NhanVien.add(txt_ma);
+		txt_ma.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Mã Nhân Viên");
+		lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2.setBounds(20, 77, 100, 20);
+		input_NhanVien.add(lblNewLabel_2);
+		
+		txt_ten = new JTextField();
+		txt_ten.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_ten.setColumns(10);
+		txt_ten.setBounds(140, 102, 218, 20);
+		input_NhanVien.add(txt_ten);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Tên Nhân Viên");
+		lblNewLabel_2_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_1.setBounds(144, 77, 135, 20);
+		input_NhanVien.add(lblNewLabel_2_1);
+		
+		rd_nam = new JRadioButton("Nam");
+		rd_nam.setBackground(new Color(255, 255, 255));
+		rd_nam.setFont(new Font("Dialog", Font.PLAIN, 9));
+		rd_nam.setBounds(16, 126, 59, 30);
+		input_NhanVien.add(rd_nam);
+		
+		rd_nu = new JRadioButton("Nữ");
+		rd_nu.setFont(new Font("Dialog", Font.PLAIN, 9));
+		rd_nu.setBackground(Color.WHITE);
+		rd_nu.setBounds(87, 126, 50, 30);
+		input_NhanVien.add(rd_nu);
+
+		gioiTinhGroup = new ButtonGroup();
+
+		gioiTinhGroup.add(rd_nam);
+		gioiTinhGroup.add(rd_nu);
+		
+		txt_sdt = new JTextField();
+		txt_sdt.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_sdt.setColumns(10);
+		txt_sdt.setBounds(20, 181, 164, 20);
+		input_NhanVien.add(txt_sdt);
+		
+		JLabel lblNewLabel_2_1_1 = new JLabel("Số Điện Thoại");
+		lblNewLabel_2_1_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_1_1.setBounds(20, 163, 164, 20);
+		input_NhanVien.add(lblNewLabel_2_1_1);
+		
+		txt_cccd = new JTextField();
+		txt_cccd.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_cccd.setColumns(10);
+		txt_cccd.setBounds(194, 181, 164, 20);
+		input_NhanVien.add(txt_cccd);
+		
+		JLabel lblNewLabel_2_1_1_1 = new JLabel("Số CMND");
+		lblNewLabel_2_1_1_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_1_1_1.setBounds(194, 163, 164, 20);
+		input_NhanVien.add(lblNewLabel_2_1_1_1);
+		
+		txt_dc = new JTextField();
+		txt_dc.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_dc.setColumns(10);
+		txt_dc.setBounds(20, 222, 336, 20);
+		input_NhanVien.add(txt_dc);
+		
+		JLabel lblNewLabel_2_1_1_2 = new JLabel("Địa Chỉ");
+		lblNewLabel_2_1_1_2.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_1_1_2.setBounds(20, 204, 346, 20);
+		input_NhanVien.add(lblNewLabel_2_1_1_2);
+		
+		JLabel lblNewLabel_2_1_1_2_1 = new JLabel("Trạng thái làm việc");
+		lblNewLabel_2_1_1_2_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_1_1_2_1.setBounds(20, 253, 100, 20);
+		input_NhanVien.add(lblNewLabel_2_1_1_2_1);
+		
+		txt_maTK = new JTextField();
+		txt_maTK.setEnabled(false);
+		txt_maTK.setEditable(false);
+		txt_maTK.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txt_maTK.setColumns(10);
+		txt_maTK.setBounds(98, 284, 258, 20);
+		input_NhanVien.add(txt_maTK);
+		
+		JLabel lblNewLabel_2_2 = new JLabel("Mã Tài Khoản");
+		lblNewLabel_2_2.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblNewLabel_2_2.setBounds(20, 284, 135, 20);
+		input_NhanVien.add(lblNewLabel_2_2);
+		
+		JButton btn_them = new JButton("Thêm");
+		btn_them.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					themNhanVien();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btn_them.setForeground(Color.WHITE);
+		btn_them.setBackground(Color.BLACK);
+		btn_them.setBounds(42, 417, 120, 40);
+		input_NhanVien.add(btn_them);
+		
+		JButton btn_sua = new JButton("Sửa");
+		btn_sua.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					suaNhanVien(e);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btn_sua.setForeground(Color.WHITE);
+		btn_sua.setBackground(Color.LIGHT_GRAY);
+		btn_sua.setBounds(209, 417, 120, 40);
+		input_NhanVien.add(btn_sua);
+		
+		JButton btn_lammoi = new JButton("Làm Mới");
+		btn_lammoi.setForeground(Color.WHITE);
+		btn_lammoi.setBackground(Color.LIGHT_GRAY);
+		btn_lammoi.setBounds(209, 467, 120, 40);
+		input_NhanVien.add(btn_lammoi);
+		btn_lammoi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				lamMoi();
+			}
+		});
+		
+		JButton btn_xoa = new JButton("Xóa");
+		btn_xoa.setForeground(Color.WHITE);
+		btn_xoa.setBackground(Color.LIGHT_GRAY);
+		btn_xoa.setBounds(42, 467, 120, 40);
+		input_NhanVien.add(btn_xoa);
+		btn_xoa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					xoaNhanVien(e);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(140, 133, 218, 20);
+		input_NhanVien.add(dateChooser);
+		
+		JLabel txt_Email = new JLabel("Email");
+		txt_Email.setFont(new Font("Dialog", Font.PLAIN, 11));
+		txt_Email.setBounds(20, 325, 135, 20);
+		input_NhanVien.add(txt_Email);
+		
+		JLabel txt_MatKhau = new JLabel("Mật Khẩu");
+		txt_MatKhau.setFont(new Font("Dialog", Font.PLAIN, 11));
+		txt_MatKhau.setBounds(20, 370, 135, 20);
+		input_NhanVien.add(txt_MatKhau);
+		
+		textField_Email = new JTextField();
+		textField_Email.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textField_Email.setColumns(10);
+		textField_Email.setBounds(98, 324, 258, 20);
+		input_NhanVien.add(textField_Email);
+		
+		text_MK = new JTextField();
+		text_MK.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		text_MK.setColumns(10);
+		text_MK.setBounds(98, 370, 258, 20);
+		input_NhanVien.add(text_MK);
+		
+		text_TTLV = new JTextField();
+		text_TTLV.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		text_TTLV.setColumns(10);
+		text_TTLV.setBounds(124, 253, 232, 20);
+		input_NhanVien.add(text_TTLV);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(0, 0, 580, 517);
+		content.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		model = new DefaultTableModel();
+		model.addColumn("Mã NV");
+		model.addColumn("Tên NV");
+		model.addColumn("Giới Tính");
+		model.addColumn("Ngày Sinh");
+		model.addColumn("SDT");
+		model.addColumn("CCCD");
+		model.addColumn("Địa Chỉ");
+		model.addColumn("TTLV");
+		model.addColumn("TenTK");
+		model.addColumn("MK");
+		model.addColumn("Email");
+		table.setModel(model);
+		table.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int row = table.getSelectedRow();
+				txt_ma.setText(model.getValueAt(row, 0).toString());
+		    	txt_ten.setText(model.getValueAt(row, 1).toString());
+		    	if (model.getValueAt(row, 2).equals("Nam")) {
+		    		rd_nam.setSelected(true);
+			    }
+			    if (model.getValueAt(row, 2).equals("Nữ")) {
+			    	rd_nu.setSelected(true);
+			    }
+			    
+			    
+			    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			    String dateString = model.getValueAt(row, 3).toString();
+		        Date date = null;
+				try {
+					date = sdf.parse(dateString);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		            dateChooser.setDate(date);
+			    
+			    txt_sdt.setText(model.getValueAt(row, 4).toString());
+			    txt_cccd.setText(model.getValueAt(row, 5).toString());
+			    txt_dc.setText(model.getValueAt(row, 6).toString());
+			    text_TTLV.setText(model.getValueAt(row, 7).toString());
+			    txt_maTK.setText(model.getValueAt(row, 8).toString());
+			    text_MK.setText(model.getValueAt(row, 9).toString());
+			    textField_Email.setText(model.getValueAt(row, 10).toString());
+
+
+
+			}
+		});
+		
+		JPanel box_clock = new JPanel();
+        box_clock.setBackground(new Color(255, 255, 255));
+        box_clock.setBounds(34, 10, 260, 50);
+        contentPane.add(box_clock);
+        box_clock.setLayout(null);
+
+        lblClock = new JLabel();
+        lblClock.setHorizontalAlignment(SwingConstants.CENTER);
+        lblClock.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblClock.setBounds(10, 0, 240, 50);
+        lblClock.setForeground(Color.BLACK);
+        box_clock.add(lblClock);
+
+        timer = new Timer(0, this);
+        timer.start();
+		
+       
+        
+		
+		
+		JPanel DangXuat = new JPanel();
+		DangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		JButton jButton_1 = new JButton("Đăng Xuất");
+		jButton_1.setBounds(990, 10, 150, 50);
+		jButton_1.setFont(new Font("Tahoma ", Font.BOLD, 14));
+		jButton_1.setBackground(new Color(255, 0, 0));
+		jButton_1.setForeground(Color.WHITE);
+		
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setContentAreaFilled(false);
+			jButton_1.setFocusPainted(false);
+			jButton_1.setOpaque(true);
+			contentPane.add(jButton_1);
+			
+					jButton_1.addMouseListener(new MouseAdapter() {
+					    @Override
+					    public void mouseEntered(MouseEvent e) {
+					        jButton_1.setBackground(Color.BLACK);
+					    }
+			
+					    @Override
+					    public void mouseExited(MouseEvent e) {
+					        jButton_1.setBackground(new Color(255, 0, 0));
+					    }
+					});
+					
+							jButton_1.addActionListener(new ActionListener() {
+							    public void actionPerformed(ActionEvent e) {
+							        if (JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất!", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							        	Login lo = new Login();
+							        	lo.setVisible(true);							          
+							            dispose();
+							        }
+							    }
+							});
+		
+		
+
+        
+		JLabel lblquanly = new JLabel("QL:");
+		lblquanly.setForeground(Color.WHITE);
+		lblquanly.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblquanly.setBounds(878, -20, 232, 80);
+		contentPane.add(lblquanly);
+		
+		JLabel lbltenql = new JLabel("Nguyen Van A");
+		lbltenql.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ThongTienNhanVien t = new ThongTienNhanVien();
+				t.setThongTin(name);
+				t.setVisible(true);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changFont(lbltenql, Color.cyan);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changFont(lbltenql, Color.white);
+			}
+		});
+		lbltenql.setHorizontalAlignment(SwingConstants.CENTER);
+		lbltenql.setForeground(Color.WHITE);
+		lbltenql.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbltenql.setBounds(833, 6, 122, 80);
+		lbltenql.setText(name);
+		contentPane.add(lbltenql);
+		
+		JPanel header = new JPanel();
+		header.setBorder(UIManager.getBorder("RadioButton.border"));
+		header.setBounds(0, 0, 1161, 100);
+		header.setBackground(new Color (136, 108, 94));
+		contentPane.add(header);
+		
+		JPanel slideBar = new JPanel();
+		slideBar.setBackground(new Color(136, 108, 94));
+		slideBar.setBounds(0, 100, 213, 524);
+		contentPane.add(slideBar);
+		slideBar.setLayout(null);
+		
+		JPanel Menu = new JPanel();
+		Menu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				QL_ThucDon t;
+				try {
+					t = new QL_ThucDon();
+					t.setVisible(true);
+					dispose();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(Menu, new Color(149, 119, 104));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(Menu, new Color(136, 108, 94));
+			}
+		});
+		Menu.setBounds(0, 119, 217, 60);
+		Menu.setBorder(null);
+		Menu.setBackground(new Color(136, 108, 94));
+		slideBar.add(Menu);
+		Menu.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("Thực Đơn");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		Menu.add(lblNewLabel, BorderLayout.CENTER);
+		
+		JPanel NhanVien = new JPanel();
+		NhanVien.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		});
+		NhanVien.setBorder(null);
+		NhanVien.setBackground(new Color(163, 130, 113));
+		NhanVien.setBounds(0, 177, 217, 60);
+		slideBar.add(NhanVien);
+		NhanVien.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNhnVin = new JLabel("Nhân Viên");
+		lblNhnVin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNhnVin.setForeground(Color.WHITE);
+		lblNhnVin.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		NhanVien.add(lblNhnVin, BorderLayout.CENTER);
+		
+		JPanel HoaDon = new JPanel();
+		HoaDon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				QL_HoaDon t = new QL_HoaDon();
+				t.setVisible(true);
+				dispose();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(HoaDon, new Color(149, 119, 104));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(HoaDon, new Color(136, 108, 94));
+			}
+		});
+		HoaDon.setBorder(null);
+		HoaDon.setBackground(new Color(136, 108, 94));
+		HoaDon.setBounds(0, 234, 217, 60);
+		slideBar.add(HoaDon);
+		HoaDon.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblHan = new JLabel("Hóa Đơn");
+		lblHan.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHan.setForeground(Color.WHITE);
+		lblHan.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		HoaDon.add(lblHan, BorderLayout.CENTER);
+		
+		loadMa();
+		loadTable();
+
+	}
+	
+	private void changeColor(JPanel p, Color color) {
+		p.setBackground(color);
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == timer) {
+            // Cập nhật thời gian
+            updateClock();
+        }
+	}
+    private void updateClock() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH)+1;
+        int year = cal.get(Calendar.YEAR);
+        
+        String ampm;
+        if (hour >= 12) {
+            ampm = "PM";
+            if (hour > 24) {
+                hour -= 12;
+            }
+        } else {
+            ampm = "AM";
+            if (hour == 0) {
+                hour = 12;
+            }
+        }
+        
+        String time = String.format("%02d:%02d:%02d %s  %04d/%02d/%02d", hour, minute, second, ampm, year, month, day);
+        lblClock.setText(time);
+    }
+    
+
+    
+  
+   
+    public void loadTable() throws UnknownHostException, IOException, ClassNotFoundException {
+    	Socket socket = new Socket("192.168.1.141", 6666);
+    	nvdao = new Client_NhanVien_dao(socket);
+
+    	List<NhanVien> nvs = nvdao.getAllNhanVien();
+		model.setRowCount(0);
+			for(NhanVien nv :nvs ) {
+				 Object [] data = {nv.getMaNV(), nv.getTenNV(), nv.getGioiTinh(), nv.getNgaySinh(), nv.getSDT(), nv.getCMND()
+		            		, nv.getDiaChi(), nv.getTrangThaiLamViec(),nv.gettK(),nv.getmK(),nv.getEmail()};
+		            model.addRow(data);
+
+		}
+	}
+
+    
+    public NhanVien reverseNhanVien() {
+    	String maNV,tenNV,namSinh,CCCD,SDT,diaChi,maTK,MK,email;
+    	String TTLV = "";
+    	String gioiTinh = "";
+    	maNV = txt_ma.getText().toString();
+    	tenNV = txt_ten.getText().toString();
+    	if (rd_nam != null && rd_nam.isSelected()) {
+    		gioiTinh = rd_nam.getText().toString();
+	    }
+	    if (rd_nu != null && rd_nu.isSelected()) {
+	    	gioiTinh = rd_nu.getText().toString();
+	    }
+	    
+		 Date selectedDate = dateChooser.getDate();
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 namSinh = dateFormat.format(selectedDate);
+		 CCCD = txt_cccd.getText().toString();
+
+
+		 TTLV = text_TTLV.getText().toString();
+
+		 SDT = txt_sdt.getText().toString();
+		 diaChi = txt_dc.getText().toString();
+		 maTK = txt_maTK.getText().toString();
+		 MK = text_MK.getText().toString();
+		 email = textField_Email.getText().toString();
+		
+		 return new NhanVien(maNV,tenNV ,gioiTinh ,namSinh, CCCD, SDT, TTLV, diaChi, maTK, MK, email);
+    }
+    
+    public void themNhanVien() throws UnknownHostException, IOException, ClassNotFoundException {
+    	String maNV,tenNV,namSinh,CCCD,SDT,diaChi,maTK,MK,email;
+    	String TTLV = "";
+    	String gioiTinh = "";
+    	maNV = txt_ma.getText().toString();
+    	tenNV = txt_ten.getText().toString();
+    	if (rd_nam != null && rd_nam.isSelected()) {
+    		gioiTinh = rd_nam.getText().toString();
+	    }
+	    if (rd_nu != null && rd_nu.isSelected()) {
+	    	gioiTinh = rd_nu.getText().toString();
+	    }
+	    
+		 Date selectedDate = dateChooser.getDate();
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 namSinh = dateFormat.format(selectedDate);
+		 CCCD = txt_cccd.getText().toString();
+
+
+		 TTLV = text_TTLV.getText().toString();
+
+		 SDT = txt_sdt.getText().toString();
+		 diaChi = txt_dc.getText().toString();
+		 maTK = txt_maTK.getText().toString();
+		 MK = text_MK.getText().toString();
+		 email = textField_Email.getText().toString();	
+		 Socket socket = new Socket("192.168.1.141", 6666);
+		 nvdao = new Client_NhanVien_dao(socket);
+		 
+			NhanVien nhanVien = new NhanVien(maNV,tenNV ,gioiTinh ,namSinh, CCCD, SDT, TTLV, diaChi, maTK, MK, email);
+			nvdao.ThemNhanVien(nhanVien);
+			Object [] rowData = {maNV,tenNV ,gioiTinh ,namSinh, CCCD, SDT, TTLV, diaChi, maTK, MK, email};
+			model.addRow(rowData);
+			JOptionPane.showMessageDialog(this, "Thêm Nhân Viên Thành Công");
+			loadTable();
+			lamMoi();
+    }
+    
+    
+    protected void xoaNhanVien(ActionEvent e) throws UnknownHostException, IOException, ClassNotFoundException {
+    	Socket socket = new Socket("192.168.1.141", 6666);
+    	nvdao = new Client_NhanVien_dao(socket);
+    	int row = table.getSelectedRow();
+		if(row >= 0) {
+				String manv = (String) table.getValueAt(row, 0);
+				nvdao.xoaNhanVien(manv);
+				model.removeRow(row);
+				lamMoi();
+				loadTable();
+		}
+		JOptionPane.showMessageDialog(this, "Xóa Nhân viên Thành Công");
+	}
+    
+    protected void suaNhanVien(ActionEvent e) throws UnknownHostException, IOException, ClassNotFoundException {
+    	Socket socket = new Socket("192.168.1.141", 6666);
+    	nvdao = new Client_NhanVien_dao(socket);
+		int row = table.getSelectedRow();
+		
+		if(row >= 0) {
+				NhanVien nv = reverseNhanVien();
+				nvdao.updateNhanVien(nv);
+				table.setValueAt(txt_ten.getText(), row, 1);
+				table.setValueAt(nv.getGioiTinh(), row, 2);
+				table.setValueAt(dateChooser.getDate(), row, 3);
+				table.setValueAt(txt_sdt.getText(), row, 4);
+				table.setValueAt(txt_cccd.getText(), row, 5);
+				table.setValueAt(txt_dc.getText(), row, 6);
+				table.setValueAt(text_TTLV.getText(), row, 7);
+				table.setValueAt(text_MK.getText(), row, 9);
+				table.setValueAt(textField_Email.getText(), row, 10);
+				JOptionPane.showMessageDialog(this, "Sửa thông tin nhân viên thành công!");
+				table.setModel(model);
+			}
+		loadTable();
+	}
+	private void changFont(JLabel p, Color c) {
+		p.setForeground(c);
+	}
+    
+    public void lamMoi() {
+    	
+    	NhanVien_DAO maNext = new NhanVien_DAO();
+    	txt_ma.setText(maNext.getNextMaNV());
+    	txt_maTK.setText(maNext.getNextMaTK());
+    	txt_ten.setText("");
+		text_TTLV.setText("");
+		txt_sdt.setText("");
+		txt_dc.setText("");
+		text_MK.setText("");
+		textField_Email.setText("");
+		txt_cccd.setText("");
+		dateChooser.setDate(null);
+//		table.setSelectionMode(-1);
+    }
+    
+    public void loadMa() {
+    	NhanVien_DAO maNext = new NhanVien_DAO();
+    	txt_ma.setText(maNext.getNextMaNV());
+    	txt_maTK.setText(maNext.getNextMaTK());
+    }
+}

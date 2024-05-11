@@ -1,0 +1,47 @@
+package GiaoDien;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyComboBoxExample extends JFrame {
+    private JComboBox<String> comboBox;
+    private JButton button;
+
+    public MyComboBoxExample() {
+        setTitle("ComboBox Example");
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Tạo một JComboBox và thêm các item vào đó
+        comboBox = new JComboBox<>();
+        comboBox.addItem("Item 1");
+        comboBox.addItem("Item 2");
+        comboBox.addItem("Item 3");
+        comboBox.addItem("Item 4");
+
+        // Tạo một JButton để in ra giá trị được chọn từ JComboBox khi được nhấp
+        button = new JButton("Get Selected Item");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedItem = (String) comboBox.getSelectedItem();
+                JOptionPane.showMessageDialog(MyComboBoxExample.this, "Selected Item: " + selectedItem);
+            }
+        });
+
+        // Thêm JComboBox và JButton vào JFrame
+        setLayout(new FlowLayout());
+        add(comboBox);
+        add(button);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new MyComboBoxExample();
+            }
+        });
+    }
+}
+

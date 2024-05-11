@@ -1,0 +1,102 @@
+package dao;
+
+import java.util.List;
+
+import Entities.NhanVien;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+
+public class NhanVien_DAO {
+	private EntityManager entityManager;
+
+    public NhanVien_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<NhanVien> getAllNhanVien() {
+    	TypedQuery<NhanVien> query = entityManager.createQuery("SELECT n FROM NhanVien n ", NhanVien.class);
+        return query.getResultList();
+    }
+    
+    public void insertNhanVien(NhanVien nhanVien) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(nhanVien);
+        entityManager.getTransaction().commit();
+    }
+    
+    public void deleteNhanVien(String maNV) {
+        entityManager.getTransaction().begin();
+        NhanVien nhanVien = entityManager.find(NhanVien.class, maNV);
+        if (nhanVien != null) {
+            entityManager.remove(nhanVien);
+        }
+        entityManager.getTransaction().commit();
+    }
+    
+    
+    public void updateNhanVien(NhanVien updatedNhanVien) {
+        entityManager.getTransaction().begin();
+        NhanVien existingNhanVien = entityManager.find(NhanVien.class, updatedNhanVien.getMaNV());
+        if (existingNhanVien != null) {
+        	existingNhanVien.setCMND(updatedNhanVien.getCMND());
+            existingNhanVien.setSDT(updatedNhanVien.getSDT());
+            existingNhanVien.setDiaChi(updatedNhanVien.getDiaChi());
+            existingNhanVien.setEmail(updatedNhanVien.getEmail());
+            existingNhanVien.setGioiTinh(updatedNhanVien.getGioiTinh());
+            existingNhanVien.setmK(updatedNhanVien.getmK());
+            existingNhanVien.setNgaySinh(updatedNhanVien.getNgaySinh());
+            existingNhanVien.settK(updatedNhanVien.gettK());
+            existingNhanVien.setTrangThaiLamViec(updatedNhanVien.getTrangThaiLamViec());
+            existingNhanVien.setTenNV(updatedNhanVien.getTenNV());
+        }
+        entityManager.getTransaction().commit();
+    }
+    
+    public NhanVien getNhanVienById(String maNV) {
+        return entityManager.find(NhanVien.class, maNV);
+    }
+    
+    public String getNextMaNV() {
+        String queryStr = "SELECT MAX(n.maNV) FROM NhanVien n";
+        Query query = entityManager.createQuery(queryStr);
+        String maxMaNV = (String) query.getSingleResult();
+        if (maxMaNV == null) {
+            return "NVAA001";
+        } else {
+
+            String numericPart = maxMaNV.substring(5);
+            int num = Integer.parseInt(numericPart);
+            num++;
+            String newMaNV = maxMaNV.substring(0, 5) + String.format("%03d", num);
+            return newMaNV;
+        }
+    }
+    
+    
+    public String getNextMaTK() {
+        String queryStr = "SELECT MAX(n.tK) FROM NhanVien n";
+        Query query = entityManager.createQuery(queryStr);
+        String maxMaTK = (String) query.getSingleResult();
+        
+        // Kiểm tra nếu không có bản ghi nào trong cơ sở dữ liệu
+        if (maxMaTK == null) {
+            return "TK001"; // Nếu không có bản ghi nào, trả về mã TK đầu tiên
+        } else {
+            // Trích xuất phần số từ mã TK lớn nhất
+            String numericPart = maxMaTK.substring(2);
+            int num = Integer.parseInt(numericPart);
+            num++; // Tăng số lên 1
+            // Tạo mã TK mới bằng cách kết hợp phần ký tự và số đã được tăng
+            String newMaTK = maxMaTK.substring(0, 2) + String.format("%03d", num);
+            return newMaTK;
+        }
+    }
+    
+    public void close() {
+        entityManager.close();
+    }
+}

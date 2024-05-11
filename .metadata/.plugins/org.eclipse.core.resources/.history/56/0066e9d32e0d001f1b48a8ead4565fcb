@@ -1,0 +1,488 @@
+package GiaoDien;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+
+import Entities.ChiTietHoaDon;
+import Entities.HoaDon;
+import Entities.NhanVien;
+import Entities.ThucDon;
+import dao.HoaDon_DAO;
+import dao.NhanVien_DAO;
+import dao.ThucDon_DAO;
+import dao.User;
+
+import javax.swing.JTable;
+
+import javax.swing.JButton;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextField;
+
+
+public class Order extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JLabel lblClock;
+	private Timer timer;
+
+	DefaultTableModel model;
+	private JTable table;
+	private JPanel content;
+	private JLabel lbl_tongTien;
+	DecimalFormat df = new DecimalFormat("###,###,### VND");
+	private JTextField txt_tienKhachTra;
+	String name, ma, maHDtrongCTHD;
+	double TongTien;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Order frame = new Order();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Order() {
+
+		setBackground(Color.WHITE);
+		setTitle("Order");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setBounds(100, 100, 1175, 650);
+		setResizable(false);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(null);
+
+		
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel Order = new JPanel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			protected void paintComponent(Graphics g) {
+				g.setColor(getBackground());
+				g.fillRect(0, 0, getWidth(), getHeight());
+				super.paintComponent(g);
+			}
+		};
+		Order.setBackground(new Color(217, 211, 211));
+		Order.setBounds(578, 96, 583, 517);
+		contentPane.add(Order);
+		Order.setLayout(null);
+		
+		txt_tienKhachTra = new JTextField();
+		txt_tienKhachTra.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txt_tienKhachTra.setBounds(25, 404, 200, 28);
+		Order.add(txt_tienKhachTra);
+		txt_tienKhachTra.setColumns(10);
+		
+		
+		JScrollPane scrollPane_DSDVdadat = new JScrollPane(table);
+		scrollPane_DSDVdadat.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_DSDVdadat.setBounds(25, 21, 532, 355);
+		Order.add(scrollPane_DSDVdadat);
+		scrollPane_DSDVdadat.setBackground(new Color(255, 255, 255));
+		
+		table = new JTable();
+		scrollPane_DSDVdadat.setViewportView(table);
+		
+		model = new DefaultTableModel();
+		model.addColumn("Mã Thực Đơn");
+		model.addColumn("Tên");
+		model.addColumn("Giá");
+		model.addColumn("Số Lượng");
+		table.setModel(model);
+		
+		JButton btn_dat = new JButton("Đặt Món");
+		btn_dat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String cel = model.getValueAt(0, 0).toString();
+				if(cel.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Không để đặt món!");
+				}else {
+					
+					writeHoaDon(TongTien);
+					writeCTHD(maHDtrongCTHD);
+					JOptionPane.showMessageDialog(null, "Đặt Thành Công!!");
+					model.setRowCount(0);
+					txt_tienKhachTra.setText("");
+					
+					Mau_HoaDon m = new Mau_HoaDon();
+					m.setVisible(true);
+					m.setHoaDon(maHDtrongCTHD);	
+					
+				}
+				
+			}
+		});
+		btn_dat.setBackground(new Color(0, 0, 0));
+		btn_dat.setForeground(new Color(255, 255, 255));
+		btn_dat.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btn_dat.setBounds(25, 442, 200, 50);
+		Order.add(btn_dat);
+		
+		JButton btn_huy = new JButton("Hủy Món");
+		btn_huy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		        	DefaultTableModel model = (DefaultTableModel) table.getModel();
+		            model.removeRow(selectedRow);
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Vui lòng chọn dòng để xóa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        }
+			}
+		});
+		btn_huy.setForeground(Color.WHITE);
+		btn_huy.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btn_huy.setBackground(new Color(136, 108, 94));
+		btn_huy.setBounds(357, 442, 200, 50);
+		Order.add(btn_huy);
+		
+		lbl_tongTien = new JLabel("Tổng Tiền: ");
+		lbl_tongTien.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_tongTien.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_tongTien.setBounds(25, 396, 532, 28);
+		Order.add(lbl_tongTien);
+		
+		JLabel lblNewLabel = new JLabel("Tiền Khách Trả");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel.setBounds(25, 379, 200, 28);
+		Order.add(lblNewLabel);
+		
+		JPanel box_clock = new JPanel();
+        box_clock.setBackground(new Color(255, 255, 255));
+        box_clock.setBounds(34, 10, 260, 50);
+        contentPane.add(box_clock);
+        box_clock.setLayout(null);
+
+        lblClock = new JLabel();
+        lblClock.setHorizontalAlignment(SwingConstants.CENTER);
+        lblClock.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblClock.setBounds(10, 0, 240, 50);
+        lblClock.setForeground(Color.BLACK);
+        box_clock.add(lblClock);
+
+        timer = new Timer(0, this);
+        timer.start();
+
+		JPanel DangXuat = new JPanel();
+		DangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		JButton jButton_1 = new JButton("Đăng Xuất");
+		jButton_1.setBounds(990, 10, 150, 50);
+		jButton_1.setFont(new Font("Tahoma ", Font.BOLD, 14));
+		jButton_1.setBackground(new Color(255, 0, 0));
+		jButton_1.setForeground(Color.WHITE);
+		
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setContentAreaFilled(false);
+			jButton_1.setFocusPainted(false);
+			jButton_1.setOpaque(true);
+			contentPane.add(jButton_1);
+			
+					jButton_1.addMouseListener(new MouseAdapter() {
+					    @Override
+					    public void mouseEntered(MouseEvent e) {
+					        jButton_1.setBackground(Color.BLACK);
+					    }
+			
+					    @Override
+					    public void mouseExited(MouseEvent e) {
+					        jButton_1.setBackground(new Color(255, 0, 0));
+					    }
+					});
+					
+							jButton_1.addActionListener(new ActionListener() {
+							    public void actionPerformed(ActionEvent e) {
+							        if (JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất!", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							        	Login lo = new Login();
+							        	lo.setVisible(true);							          
+							            dispose();
+							        }
+							    }
+							});
+
+		JLabel lblquanly = new JLabel("NV:");
+		lblquanly.setForeground(Color.WHITE);
+		lblquanly.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblquanly.setBounds(878, -20, 232, 80);
+		contentPane.add(lblquanly);
+		
+		JLabel lbltenql = new JLabel("Nguyen Van A");
+		lbltenql.setForeground(Color.WHITE);
+		lbltenql.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbltenql.setBounds(833, 6, 232, 80);
+		name = User.getTenNhanVien();
+		lbltenql.setText(name);
+		contentPane.add(lbltenql);
+		
+		JPanel header = new JPanel();
+		header.setBorder(UIManager.getBorder("RadioButton.border"));
+		header.setBackground(new Color(136, 108, 94));
+		header.setBounds(0, 0, 1161, 100);
+		contentPane.add(header);
+		header.setLayout(null);
+		
+		content = new JPanel();
+		content.setBackground(new Color(255, 255, 255));
+		content.setBounds(0, 96, 583, 517);
+		contentPane.add(content);
+		content.setLayout(null);
+		
+		loadData();
+		
+	}
+
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == timer) {
+            updateClock();
+        }
+	}
+    private void updateClock() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH)+1;
+        int year = cal.get(Calendar.YEAR);
+        
+        String ampm;
+        if (hour >= 12) {
+            ampm = "PM";
+            if (hour > 24) {
+                hour -= 12;
+            }
+        } else {
+            ampm = "AM";
+            if (hour == 0) {
+                hour = 12;
+            }
+        }
+        
+        String time = String.format("%02d:%02d:%02d %s  %04d/%02d/%02d", hour, minute, second, ampm, year, month, day);
+        lblClock.setText(time);
+    }
+    
+    private void loadData() {
+		ThucDon_DAO ds = new ThucDon_DAO();
+		List<ThucDon> listTD = ds.getAllThucDon();
+		draw(listTD, content);
+	}
+    
+    private void draw(List<ThucDon> listtd, JPanel content) {
+
+		JPanel Left_QLDV = new JPanel();
+		Left_QLDV.setBorder(null);
+		Left_QLDV.setBackground(new Color(255, 255, 255));
+		Left_QLDV.setBounds(0, 0, 583, 517);
+		content.add(Left_QLDV);
+		Left_QLDV.setLayout(null);
+		
+		JScrollPane scrollPane_DSDV = new JScrollPane();
+		scrollPane_DSDV.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_DSDV.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_DSDV.setBounds(0, 0, 581, 517);
+		scrollPane_DSDV.setBackground(new Color(255, 255, 255, 0));
+		Left_QLDV.add(scrollPane_DSDV);
+		
+		JPanel panel_dsdv = new JPanel();
+		panel_dsdv.setBackground(new Color(255, 255, 255));
+		scrollPane_DSDV.setViewportView(panel_dsdv);
+		panel_dsdv.setLayout(new GridLayout(0, 3, 0, 0));
+    		for(ThucDon td : listtd) {
+    			
+    		//load label cha
+    		JPanel pnl_dichvu = new JPanel();
+    		pnl_dichvu.setBackground(new Color(255, 255, 255));
+    		pnl_dichvu.setLayout(null);
+    		pnl_dichvu.setPreferredSize(new Dimension(150,150));
+    		pnl_dichvu.setBorder(LineBorder.createBlackLineBorder());
+    		panel_dsdv.add(pnl_dichvu);
+    		
+    		//load label gia
+    		JLabel lbl_price = new JLabel(td.getDonGia() + "/1 Ly");
+    		lbl_price.setHorizontalAlignment(SwingConstants.CENTER);
+    		lbl_price.setFont(new Font("Tahoma", Font.BOLD, 11));
+    		lbl_price.setBounds(20, 115, 150, 35);
+    		pnl_dichvu.add(lbl_price);
+    		
+    		//load ten dich vu
+    		JLabel lbl_name = new JLabel(td.getTenThucDon());
+    		lbl_name.setFont(new Font("Tahoma", Font.BOLD, 13));
+    		lbl_name.setHorizontalAlignment(SwingConstants.CENTER);
+    		lbl_name.setBounds(20, 98, 150, 35);
+    		pnl_dichvu.add(lbl_name);
+
+    		//load hinh anh
+    		JLabel lbl_hinhanh = new JLabel("");
+    		lbl_hinhanh.setIcon(new ImageIcon(QL_ThucDon.class.getResource("/Imgs/cup64.png")));
+    		lbl_hinhanh.setHorizontalAlignment(SwingConstants.CENTER);
+    		lbl_hinhanh.setBounds(20, 0, 150, 150);
+    		pnl_dichvu.add(lbl_hinhanh);
+    		pnl_dichvu.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					ma = td.getMaTD();
+					loadThucDonDaChon(ma);
+					double tong = tinhTongTien();
+					TongTien = tong;
+				    lbl_tongTien.setText("Tổng Tiền: "+ df.format(tong));	    
+				}
+
+			}); 		
+		}
+    	
+    }
+    
+    public double tinhTongTien() {
+    	double tongTien = 0;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            double gia = (double) model.getValueAt(i, 2);
+            int soLuong = (int) model.getValueAt(i, 3);
+            tongTien += gia * soLuong;
+        }
+        return tongTien;
+    }
+    
+    public void loadThucDonDaChon(String maTD) {
+    	ThucDon_DAO tddao = new ThucDon_DAO();
+	    DefaultTableModel model = (DefaultTableModel) table.getModel();
+	    ThucDon td = tddao.getThucDonById(maTD);
+	    int sl = 0; 
+
+	    if (td != null) {
+	        String input = JOptionPane.showInputDialog(null, "Nhập số lượng:", "Nhập số lượng", JOptionPane.QUESTION_MESSAGE);
+	        if (input != null && !input.isEmpty()) {
+	            try {
+	                sl = Integer.parseInt(input);
+	                if (sl < 0) {
+	                    JOptionPane.showMessageDialog(null, "Vui lòng nhập số không âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                    return;
+	                }
+	            } catch (NumberFormatException e) {
+	                JOptionPane.showMessageDialog(null, "Vui lòng nhập số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	                return;
+	            }
+	        } else {
+	            return; 
+	        }
+
+	        Object[] rowData = {td.getMaTD(), td.getTenThucDon(), td.getDonGia(), sl};
+	       
+	        model.addRow(rowData);
+	    }
+    }
+    
+	public void writeHoaDon(double tong) {
+    	double tienKhachTra = Double.parseDouble(txt_tienKhachTra.getText());
+    	String ma = loadMa();
+    	maHDtrongCTHD = ma;
+    	String maNV = loadMaNV();
+    	NhanVien nv = new NhanVien(maNV, null, null, null, null, null, null, null, null, null, null);
+    	String ngayLap = getTime();
+    	HoaDon hd = new HoaDon(ma, ngayLap, tienKhachTra, tong, nv);    	
+    	HoaDon_DAO hddao = new HoaDon_DAO();
+    	hddao.insertHoaDon(hd);
+    }
+	
+	public void writeCTHD(String maHD) {
+		 for (int i = 0; i < model.getRowCount(); i++) {
+	         String  maTD =  model.getValueAt(i, 0).toString();
+	         int soLuong = (int) model.getValueAt(i, 3);   
+	         HoaDon hd = new HoaDon(maHD, null, 0, 0, null);
+	   		 ThucDon td = new ThucDon(maTD, 0, null);
+	   		 ChiTietHoaDon cthd = new ChiTietHoaDon(hd, td, soLuong);
+	   		 HoaDon_DAO dao = new HoaDon_DAO();
+	   		 dao.insertChiTietHoaDon(cthd);
+	     }
+	}
+    
+    public String getTime() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
+    
+    public String loadMa() {
+    	HoaDon_DAO maNext = new HoaDon_DAO();
+    	String maHD = maNext.getNextMaHD();
+    	return maHD;
+    }
+    
+    public String loadMaNV() {
+    	NhanVien_DAO nvdao = new NhanVien_DAO();
+    	String maNV = null;
+    	List<NhanVien> nvs = nvdao.getNhanVienByTen(name);
+    	for(NhanVien nv : nvs) {
+    		Object t []= {nv.getMaNV()};
+    		maNV = t[0] + "";
+    	}
+		return maNV;
+    }
+   
+}

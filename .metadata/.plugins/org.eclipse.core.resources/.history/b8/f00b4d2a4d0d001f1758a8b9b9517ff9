@@ -1,0 +1,28 @@
+package app;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+import Services.EntityManagerCreate;
+import jakarta.persistence.EntityManager;
+
+public class ClientHandler implements Runnable{
+	private Socket socketClient;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private EntityManagerCreate emfUtil;
+	private EntityManager em;
+	public ClientHandler(Socket socketClient) {
+		this.socketClient = socketClient;
+		emfUtil = new EntityManagerCreate();
+		em = emfUtil.getEm();
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

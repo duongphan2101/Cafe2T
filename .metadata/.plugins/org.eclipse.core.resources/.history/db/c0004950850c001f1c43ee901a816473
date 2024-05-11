@@ -1,0 +1,31 @@
+package dao;
+
+import java.util.List;
+
+
+import Entities.NhanVien;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+
+
+public class DangNhap_DAO {
+	private EntityManager entityManager;
+
+    public DangNhap_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+    
+    public List<NhanVien> getTaiKhoanMatKhau(String tk) {
+        TypedQuery<NhanVien> query = (TypedQuery<NhanVien>) entityManager.createQuery("SELECT t FROM NhanVien t where t.tK = :tK", NhanVien.class);
+        query.setParameter("tK", tk);
+        return query.getResultList();
+    }
+    
+
+    public void close() {
+        entityManager.close();
+    }
+}

@@ -1,0 +1,33 @@
+package dao;
+
+import java.util.List;
+
+import Entities.HoaDon;
+import Entities.ThucDon;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+
+
+public class HoaDon_DAO {
+	private EntityManager entityManager;
+
+    public HoaDon_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<HoaDon> getAllThucDon() {
+        TypedQuery<HoaDon> query = (TypedQuery<HoaDon>) entityManager.createQuery("SELECT t FROM HoaDon t ", HoaDon.class);
+        return query.getResultList();
+    }
+
+    public ThucDon getThucDonById(String maTD) {
+        return entityManager.find(ThucDon.class, maTD);
+    }
+
+    public void close() {
+        entityManager.close();
+    }
+}

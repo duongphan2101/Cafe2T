@@ -1,0 +1,56 @@
+package dao;
+
+import java.util.List;
+
+import Entities.HoaDon;
+import Entities.ThucDon;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+
+
+public class HoaDon_DAO {
+	private EntityManager entityManager;
+
+    public HoaDon_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<HoaDon> getAllHoaDon() {
+        TypedQuery<HoaDon> query = (TypedQuery<HoaDon>) entityManager.createQuery("SELECT t FROM HoaDon t ", HoaDon.class);
+        return query.getResultList();
+    }
+    
+    public void insertHoaDon(HoaDon hd) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(hd);
+        entityManager.getTransaction().commit();
+    }
+
+    public ThucDon getThucDonById(String maTD) {
+        return entityManager.find(ThucDon.class, maTD);
+    }
+    
+    public String getNextHD() {
+        String queryStr = "SELECT MAX(n.maHD) FROM HoaDon n";
+        Query query = entityManager.createQuery(queryStr);
+        String maxMaHD = (String) query.getSingleResult();
+        if (maxMaHD == null) {
+            return "HDAA001";
+        } else {
+
+            String numericPart = maxMaHD.substring(5);
+            int num = Integer.parseInt(numericPart);
+            num++;
+            String newMaHD = maxMaHD.substring(0, 5) + String.format("%03d", num);
+            return newMaHD;
+        }
+    }
+
+    public void close() {
+        entityManager.close();
+    }
+}

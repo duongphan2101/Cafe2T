@@ -1,0 +1,148 @@
+package app;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
+
+import Entities.NhanVien;
+import Entities.ThucDon;
+import Services.EntityManagerCreate;
+import dao.DangNhap_DAO;
+import dao.HoaDon_DAO;
+import dao.NhanVien_DAO;
+import dao.ThucDon_DAO;
+import jakarta.persistence.EntityManager;
+
+public class ClientHandler implements Runnable{
+	private Socket socketClient;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private EntityManagerCreate emfUtil;
+	private EntityManager em;
+	private DangNhap_DAO dndao;
+	private HoaDon_DAO hddao;
+	private NhanVien_DAO nvdao;
+	private ThucDon_DAO tddao;
+	
+	public ClientHandler(Socket socketClient) {
+		super();
+		this.socketClient = socketClient;
+		emfUtil = new EntityManagerCreate();
+		em = emfUtil.getEnManager();
+		dndao = new DangNhap_DAO(em);
+		nvdao = new NhanVien_DAO(em);
+		hddao = new HoaDon_DAO(em);
+		tddao = new ThucDon_DAO(em);
+	}
+	
+	@Override
+	public void run() {
+		try {
+			in = new ObjectInputStream(socketClient.getInputStream());
+			out = new ObjectOutputStream(socketClient.getOutputStream());
+			
+			while(true) {
+				String clientRequest = in.readUTF();
+				System.out.println("Client Yeu Cau: "+clientRequest);
+				switch (clientRequest) {
+				case "getNVbyTKandMK":
+				    String tk = in.readUTF();
+				    String mk = in.readUTF();
+				    boolean nv = dndao.getTaiKhoanMatKhau(tk, mk);
+				    out.writeBoolean(nv);
+				    out.flush();        
+				    break;
+					
+				case "getNVbyTK":
+					String tk1 = in.readUTF();
+
+					List<NhanVien> listNV= dndao.getTaiKhoan(tk1);
+					out.writeObject(listNV);
+					out.flush();		
+					break;
+					
+				case "getAllThucDon":
+					List<ThucDon> td = tddao.getAllThucDon();
+					out.writeObject(td);
+					out.flush();
+					break;
+				
+				case "getNextMaThucDon":
+					String maMoi = tddao.getNextMaTD();
+					out.writeUTF(maMoi);
+					out.flush();
+					break;
+					
+				case "XoaThucDon":
+					String maTD = in.readUTF();
+					tddao.deleteThucDon(maTD);
+					break;
+					
+				case "UpdateThucDon":
+					ThucDon thucDon =(ThucDon) in.readObject();
+					tddao.updateThucDon(thucDon);
+					break;
+					
+				case "ThemThucDon":
+					ThucDon thucDon1 =(ThucDon) in.readObject();
+					tddao.insertThucDon(thucDon1);
+					break;
+					
+				case "getAllNhanVien":
+					List<NhanVien> listNhanVien = nvdao.getAllNhanVien();
+					out.writeObject(listNhanVien);
+					out.flush();
+					break;	
+					
+				case "ThemNhanVien":
+					NhanVien nvien = (NhanVien) in.readObject();
+					nvdao.insertNhanVien(nvien);
+					break;
+					
+				case "UpdateNhanVien":
+					NhanVien nvien1 = (NhanVien) in.readObject();
+					nvdao.updateNhanVien(nvien1);
+					break;
+				
+				case "XoaNhanVien":
+					String maNV1 = in.readUTF();
+					nvdao.deleteNhanVien(maNV1);
+					break;
+					
+				case "MaNextNhanVien":
+					String newMa = nvdao.getNextMaNV();
+					out.writeUTF(newMa);
+					out.flush();
+					break;
+					
+				case "MaNextTaiKhoan":
+					String newMa1 = nvdao.getNextMaTK();
+					out.writeUTF(newMa1);
+					out.flush();
+					break;
+					
+				default:
+					break;
+				}
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				in.close();
+				out.close();
+				
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			emfUtil.closeEnManager();
+			emfUtil.closeEnManagerFactory();
+		}
+		
+	}
+	
+}

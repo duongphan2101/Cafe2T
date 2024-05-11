@@ -1,0 +1,17 @@
+package Services;
+
+import java.util.List;
+
+import Entities.HoaDon;
+import jakarta.persistence.EntityManager;
+
+
+public class HoaDon_Service {
+	private EntityManager entityManager;
+	@Override
+	public List<HoaDon> findAll() {
+		
+		return entityManager.createNamedQuery("Course.findAll", Course.class).getResultList();
+		
+	}
+}

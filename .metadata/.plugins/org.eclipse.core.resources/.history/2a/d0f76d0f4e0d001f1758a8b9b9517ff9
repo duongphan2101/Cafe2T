@@ -1,0 +1,87 @@
+package dao;
+
+import java.util.List;
+import Entities.ThucDon;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+
+public class ThucDon_DAO {
+	private EntityManager entityManager;
+
+    public ThucDon_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<ThucDon> getAllThucDon() {
+        TypedQuery<ThucDon> query = (TypedQuery<ThucDon>) entityManager.createQuery("SELECT t FROM ThucDon t ", ThucDon.class);
+        return query.getResultList();
+    }
+
+    
+    public void insertThucDon(ThucDon thucDon) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(thucDon);
+        entityManager.getTransaction().commit();
+    }
+    
+    public void deleteThucDon(String maTD) {
+        entityManager.getTransaction().begin();
+        ThucDon thucdon = entityManager.find(ThucDon.class, maTD);
+        if (thucdon != null) {
+            entityManager.remove(thucdon);
+        }
+        entityManager.getTransaction().commit();
+    }
+    
+    
+    public void updateThucDon(ThucDon updatedThucDon) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            ThucDon existingThucDon = entityManager.find(ThucDon.class, updatedThucDon.getMaTD());
+            if (existingThucDon != null) {
+                existingThucDon.setTenThucDon(updatedThucDon.getTenThucDon());
+                existingThucDon.setDonGia(updatedThucDon.getDonGia());
+                // Cập nhật các trường khác nếu có
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+    
+    public String getNextMaTD() {
+        String queryStr = "SELECT MAX(td.maTD) FROM ThucDon td";
+        Query query = entityManager.createQuery(queryStr);
+        String maxMaTD = (String) query.getSingleResult();
+        
+        // Kiểm tra nếu không có bản ghi nào trong cơ sở dữ liệu
+        if (maxMaTD == null) {
+            return "TD001"; // Nếu không có bản ghi nào, trả về mã TD đầu tiên
+        } else {
+            // Trích xuất phần số từ mã TD lớn nhất
+            String numericPart = maxMaTD.substring(2);
+            int num = Integer.parseInt(numericPart);
+            num++; // Tăng số lên 1
+            // Tạo mã TD mới bằng cách kết hợp phần ký tự và số đã được tăng
+            String newMaTD = maxMaTD.substring(0, 2) + String.format("%03d", num);
+            return newMaTD;
+        }
+    }
+    
+    public ThucDon getThucDonById(String maTD) {
+        return entityManager.find(ThucDon.class, maTD);
+    }
+
+    public void close() {
+        entityManager.close();
+    }
+}

@@ -1,0 +1,211 @@
+package GiaoDien;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+
+import Entities.NhanVien;
+import dao.DangNhap_DAO;
+import dao.User;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.JPasswordField;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+public class NhapEmail extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txt_email;
+	private JPasswordField txt_code;
+	private String name;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					NhapEmail frame = new NhapEmail();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public NhapEmail() {
+		setType(Type.UTILITY);
+		setResizable(false);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setTitle("\nLOGIN\r\n");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 800, 500);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(64, 128, 128));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(486, 0, 300, 463);
+		contentPane.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JLabel logo = new JLabel("CHANGE PASSWORD");
+		logo.setBackground(new Color(255, 255, 255));
+		logo.setEnabled(false);
+		logo.setFont(new Font("Tahoma", Font.BOLD, 25));
+		logo.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(logo, BorderLayout.NORTH);
+		
+		JPanel input_box = new JPanel();
+		input_box.setBorder(null);
+		input_box.setBackground(new Color(255, 255, 255, 100));
+		panel.add(input_box, BorderLayout.CENTER);
+		input_box.setLayout(null);
+		
+		txt_email = new JTextField();
+		txt_email.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txt_email.setBounds(58, 76, 200, 30);
+		input_box.add(txt_email);
+		txt_email.setColumns(10);
+		
+		txt_code = new JPasswordField();
+		txt_code.setBounds(58, 177, 200, 30);
+		input_box.add(txt_code);
+		
+		JPanel btn_dn = new JPanel();
+		
+		 KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+	        btn_dn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(enter, "ENTER");
+	        btn_dn.getActionMap().put("ENTER", new AbstractAction() {
+	            /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				@Override
+	            public void actionPerformed(ActionEvent e) {
+					Login l = new Login();
+					l.setVisible(true);
+					dispose();
+	            }
+	        });
+
+		
+		btn_dn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Login l = new Login();
+				l.setVisible(true);
+				dispose();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(btn_dn, new Color(64, 128, 128), new Color(0, 0 ,0));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(btn_dn, new Color(0, 0, 0), new Color(255, 255, 255));
+			}
+		});
+		btn_dn.setBackground(new Color(0, 0, 0));
+		btn_dn.setForeground(new Color(255, 255, 255));
+		btn_dn.setBounds(29, 288, 250, 40);
+		input_box.add(btn_dn);
+		
+		JLabel lblNewLabel_1 = new JLabel("Login");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
+		btn_dn.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Email");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2.setBounds(58, 56, 89, 13);
+		input_box.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Code");
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2_1.setBounds(58, 161, 89, 13);
+		input_box.add(lblNewLabel_2_1);
+		
+		JLabel sendemail = new JLabel("Send Mail");
+		sendemail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		sendemail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		sendemail.setHorizontalAlignment(SwingConstants.CENTER);
+		sendemail.setBounds(159, 116, 99, 30);
+		input_box.add(sendemail);
+		
+		JLabel changpass = new JLabel("Confirm Code");
+		changpass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		changpass.setHorizontalAlignment(SwingConstants.CENTER);
+		changpass.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		changpass.setBounds(159, 217, 99, 30);
+		input_box.add(changpass);
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setIcon(new ImageIcon(NhapEmail.class.getResource("/Imgs/2t_V3.2.png")));
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setBounds(88, 56, 289, 271);
+		contentPane.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel = new JLabel("2T COFFEE");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 54));
+		lblNewLabel.setBounds(68, 318, 337, 116);
+		contentPane.add(lblNewLabel);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(NhapEmail.class.getResource("/Imgs/bg-login.png")));
+		background.setBounds(0, 0, 786, 463);
+		contentPane.add(background);
+	}
+	
+	private void changeColor(JPanel p, Color color, Color color2) {
+		p.setBackground(color);
+		p.setForeground(color2);
+	}
+	
+}

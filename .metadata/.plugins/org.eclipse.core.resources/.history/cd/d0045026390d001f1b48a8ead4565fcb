@@ -1,0 +1,51 @@
+package app;
+
+import java.util.List;
+
+import Entities.HoaDon;
+import Entities.NhanVien;
+import Entities.ThucDon;
+import dao.DangNhap_DAO;
+import dao.HoaDon_DAO;
+import dao.NhanVien_DAO;
+import dao.ThucDon_DAO;
+
+public class readThucDon {
+	 public static void main(String[] args) {
+//	        ThucDon_DAO thucDonDAO = new ThucDon_DAO();
+//	        List<ThucDon> thucDons = thucDonDAO.getAllThucDon();
+//	        for (ThucDon thucDon : thucDons) {
+//	            System.out.println(thucDon);
+//	        }
+//	        thucDonDAO.close();
+//		    
+//		    	NhanVien_DAO nvdao = new NhanVien_DAO();
+//		        List<NhanVien> nvs = nvdao.getAllNhanVien();
+//		        for (NhanVien nv : nvs) {
+//		            System.out.println(nv);
+//		        }
+//		        nvdao.close();
+//		 
+//		 HoaDon_DAO hddao = new HoaDon_DAO();
+//	        List<HoaDon> hd = hddao.getAllHoaDon();
+//	        for (HoaDon nv : hd) {
+//	            System.out.println(nv);
+//	        }
+//	        thucDonDAO.close();
+	        
+//	        DangNhap_DAO nvdao = new DangNhap_DAO();
+//	        List<NhanVien> nvs = nvdao.getTaiKhoan("TK001");
+//	        for (NhanVien nv : nvs) {
+//	            System.out.println(nv);
+//	        }
+//	        nvdao.close();
+		 
+		 DangNhap_DAO dn = new DangNhap_DAO();
+		 if(dn.getTaiKhoanMatKhau("TK001", "12344")) {
+			 System.out.println("Success!");
+		 }else {
+			 System.out.println("Fail!");
+		 }
+		    
+	    }
+}

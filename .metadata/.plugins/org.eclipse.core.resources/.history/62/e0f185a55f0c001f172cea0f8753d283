@@ -1,0 +1,31 @@
+package dao;
+
+import java.util.List;
+
+import Entities.NhanVien;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+
+public class NhanVien_DAO {
+	private EntityManager entityManager;
+
+    public NhanVien_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<NhanVien> getAllNhanVien() {
+    	TypedQuery<NhanVien> query = entityManager.createQuery("SELECT n FROM NhanVien n inner join TaiKhoan t on t.maTK_maTK = t.maTK where n.maNV = 'NVAA0001'", NhanVien.class);
+        return query.getResultList();
+    }
+    
+    public NhanVien getNhanVienById(String maNV) {
+        return entityManager.find(NhanVien.class, maNV);
+    }
+    
+    public void close() {
+        entityManager.close();
+    }
+}

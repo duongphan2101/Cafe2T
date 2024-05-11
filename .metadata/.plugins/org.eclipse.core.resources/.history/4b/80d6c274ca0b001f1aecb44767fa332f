@@ -1,0 +1,291 @@
+package GiaoDien;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.BorderLayout;
+
+
+
+public class Main_QuanLy extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JLabel lblClock;
+	private Timer timer;
+
+	private JTable table = new JTable();
+	private DefaultTableModel model = (DefaultTableModel) table.getModel();
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main_QuanLy frame = new Main_QuanLy();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Main_QuanLy() {
+		setType(Type.UTILITY);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+
+		setBackground(Color.WHITE);
+		setTitle("STAFF");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setBounds(100, 100, 1175, 650);
+		setResizable(false);
+		contentPane = new JPanel();
+		contentPane.setBorder(null);
+
+		
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel HoaDon = new JPanel();
+		HoaDon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+		HoaDon.setBorder(null);
+		HoaDon.setBackground(new Color(0, 0, 0, 150));
+		HoaDon.setBounds(683, 83, 260, 80);
+		contentPane.add(HoaDon);
+		HoaDon.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("Hóa Đơn");
+		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 24));
+		HoaDon.add(lblNewLabel_1_1_1, BorderLayout.CENTER);
+		
+		JPanel NhanVien = new JPanel();
+		NhanVien.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		});
+		NhanVien.setBorder(null);
+		NhanVien.setBackground(new Color(0, 0, 0, 150));
+		NhanVien.setBounds(421, 83, 260, 80);
+		contentPane.add(NhanVien);
+		NhanVien.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Nhân Viên");
+		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1_1.setForeground(Color.WHITE);
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 24));
+		NhanVien.add(lblNewLabel_1_1, BorderLayout.CENTER);
+		
+		JPanel Menu = new JPanel();
+		Menu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		});
+		Menu.setBorder(null);
+		Menu.setBackground(new Color(0, 0, 0, 150));
+		Menu.setBounds(160, 83, 260, 80);
+		contentPane.add(Menu);
+		Menu.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1 = new JLabel("Thực Đơn");
+		lblNewLabel_1.setBackground(new Color(0, 0, 0));
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		Menu.add(lblNewLabel_1);
+		
+		JPanel box_clock = new JPanel();
+        box_clock.setBackground(new Color(255, 255, 255));
+        box_clock.setBounds(34, 10, 260, 50);
+        contentPane.add(box_clock);
+        box_clock.setLayout(null);
+
+        lblClock = new JLabel();
+        lblClock.setHorizontalAlignment(SwingConstants.CENTER);
+        lblClock.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblClock.setBounds(10, 0, 240, 50);
+        lblClock.setForeground(Color.BLACK);
+        box_clock.add(lblClock);
+
+        timer = new Timer(0, this);
+        timer.start();
+		
+       
+        
+		
+		
+		JPanel DangXuat = new JPanel();
+		DangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		JButton jButton_1 = new JButton("Đăng Xuất");
+		jButton_1.setBounds(990, 10, 150, 50);
+		jButton_1.setFont(new Font("Tahoma ", Font.BOLD, 14));
+		jButton_1.setBackground(new Color(255, 0, 0));
+		jButton_1.setForeground(Color.WHITE);
+		
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setContentAreaFilled(false);
+			jButton_1.setFocusPainted(false);
+			jButton_1.setOpaque(true);
+			contentPane.add(jButton_1);
+			
+					jButton_1.addMouseListener(new MouseAdapter() {
+					    @Override
+					    public void mouseEntered(MouseEvent e) {
+					        jButton_1.setBackground(Color.BLACK);
+					    }
+			
+					    @Override
+					    public void mouseExited(MouseEvent e) {
+					        jButton_1.setBackground(new Color(255, 0, 0));
+					    }
+					});
+					
+							jButton_1.addActionListener(new ActionListener() {
+							    public void actionPerformed(ActionEvent e) {
+							        if (JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất!", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							        	Login lo = new Login();
+							        	lo.setVisible(true);							          
+							            dispose();
+							        }
+							    }
+							});
+		
+		model = new DefaultTableModel();
+		model.addColumn("Mã DV");
+		model.addColumn("Tên Dịch Vụ");
+		model.addColumn("Đơn Giá");
+		model.addColumn("Số Lượng");
+		
+
+        
+		JLabel lblquanly = new JLabel("NV:");
+		lblquanly.setForeground(Color.WHITE);
+		lblquanly.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblquanly.setBounds(878, -20, 232, 80);
+		contentPane.add(lblquanly);
+		
+		JLabel lbltenql = new JLabel("Nguyen Van A");
+		lbltenql.setForeground(Color.WHITE);
+		lbltenql.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbltenql.setBounds(833, 6, 232, 80);
+		contentPane.add(lbltenql);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setIcon(new ImageIcon(Main_QuanLy.class.getResource("/Imgs/bg-main.png")));
+		lblNewLabel.setBounds(-95, -176, 1333, 957);
+		contentPane.add(lblNewLabel);
+		
+		
+		
+	}
+	
+//	private void changeColor(JPanel p, Color color, Color color2) {
+//		p.setBackground(color);
+//		p.setForeground(color2);
+//	}
+//	
+//	private void changFont(JPanel p, Font f) {
+//		p.setFont(f);
+//	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == timer) {
+            // Cập nhật thời gian
+            updateClock();
+        }
+	}
+    private void updateClock() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH)+1;
+        int year = cal.get(Calendar.YEAR);
+        
+        String ampm;
+        if (hour >= 12) {
+            ampm = "PM";
+            if (hour > 24) {
+                hour -= 12;
+            }
+        } else {
+            ampm = "AM";
+            if (hour == 0) {
+                hour = 12;
+            }
+        }
+        
+        String time = String.format("%02d:%02d:%02d %s  %04d/%02d/%02d", hour, minute, second, ampm, year, month, day);
+        lblClock.setText(time);
+    }
+}

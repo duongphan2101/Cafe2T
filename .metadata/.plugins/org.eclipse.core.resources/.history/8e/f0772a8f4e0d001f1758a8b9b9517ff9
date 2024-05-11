@@ -1,0 +1,42 @@
+package app;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+import Services.EntityManagerCreate;
+import dao.DangNhap_DAO;
+import dao.HoaDon_DAO;
+import dao.NhanVien_DAO;
+import dao.ThucDon_DAO;
+import dao.User;
+import jakarta.persistence.EntityManager;
+
+public class ClientHandler implements Runnable{
+	private Socket socketClient;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private EntityManagerCreate emfUtil;
+	private EntityManager em;
+	private DangNhap_DAO dndao;
+	private HoaDon_DAO hddao;
+	private NhanVien_DAO nvdao;
+	private ThucDon_DAO tddao;
+	private User user;
+	public ClientHandler(Socket socketClient) {
+		this.socketClient = socketClient;
+		emfUtil = new EntityManagerCreate();
+		em = emfUtil.getEnManager();
+		dndao = new DangNhap_DAO(em);
+		nvdao = new NhanVien_DAO(em);
+		hddao = new HoaDon_DAO(em);
+		tddao = new ThucDon_DAO(em);
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

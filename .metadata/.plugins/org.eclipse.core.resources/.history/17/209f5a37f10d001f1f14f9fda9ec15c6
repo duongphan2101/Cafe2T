@@ -1,0 +1,52 @@
+package Client_dao;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
+
+import Entities.ChiTietHoaDon;
+import Entities.HoaDon;
+
+public class Client_HoaDon_dao {
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	
+	public Client_HoaDon_dao(Socket socket) throws IOException {
+		out = new ObjectOutputStream(socket.getOutputStream());
+		in = new ObjectInputStream(socket.getInputStream());
+	}
+	
+	public List<HoaDon> getAllHoaDon() throws IOException, ClassNotFoundException{
+		out.writeUTF("GetAllHoaDon");
+		out.flush();
+		
+		List<HoaDon> hd = (List<HoaDon>) in.readObject();
+		return hd;
+		
+	}
+	
+	public HoaDon getHDbyID(String maHD) throws IOException, ClassNotFoundException {
+		out.writeUTF("getHDbyID");
+		out.flush();
+		
+		out.writeUTF(maHD);
+		out.flush();
+		
+		HoaDon hd = (HoaDon) in.readObject();
+		return hd;
+	}
+	
+	public List<ChiTietHoaDon> getCHITIETbyID(String maHD) throws IOException, ClassNotFoundException {
+		out.writeUTF("getCHITIETbyID");
+		out.flush();
+		
+		out.writeUTF(maHD);
+		out.flush();
+		
+		List<ChiTietHoaDon> cthd = (List<ChiTietHoaDon>) in.readObject();
+		return cthd;
+	}
+
+}

@@ -1,0 +1,101 @@
+package GiaoDien;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Window.Type;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+
+public class ThongTienNhanVien extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ThongTienNhanVien frame = new ThongTienNhanVien();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ThongTienNhanVien() {
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setType(Type.UTILITY);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 470, 600);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("THÔNG TIN NHÂN VIÊN");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 28));
+		lblNewLabel.setBounds(10, 10, 436, 59);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lbl_ten = new JLabel("Họ Tên Nhân Viên: Nguyễn Thị B");
+		lbl_ten.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_ten.setBounds(10, 113, 282, 38);
+		contentPane.add(lbl_ten);
+		
+		JLabel lbl_gioiTinh = new JLabel("Giới Tính:");
+		lbl_gioiTinh.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_gioiTinh.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_gioiTinh.setBounds(302, 113, 144, 38);
+		contentPane.add(lbl_gioiTinh);
+		
+		JLabel lbl_email = new JLabel("Email: 123@gmail.com");
+		lbl_email.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_email.setBounds(10, 181, 193, 38);
+		contentPane.add(lbl_email);
+		
+		JLabel lbl_sdt = new JLabel("Số Điện Thoại: ");
+		lbl_sdt.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_sdt.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_sdt.setBounds(213, 181, 233, 38);
+		contentPane.add(lbl_sdt);
+		
+		JLabel lbl_ma = new JLabel("Mã Nhân Viên: ");
+		lbl_ma.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_ma.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_ma.setBounds(279, 248, 167, 38);
+		contentPane.add(lbl_ma);
+		
+		JLabel lbl_sccc = new JLabel("Số Căn Cước:");
+		lbl_sccc.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_sccc.setBounds(10, 248, 193, 38);
+		contentPane.add(lbl_sccc);
+		
+		JLabel lbl_dc = new JLabel("Địa Chỉ: ");
+		lbl_dc.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_dc.setBounds(10, 314, 193, 38);
+		contentPane.add(lbl_dc);
+		
+		JLabel lbl_ma_1 = new JLabel("Mã Nhân Viên: ");
+		lbl_ma_1.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_ma_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_ma_1.setBounds(279, 314, 167, 38);
+		contentPane.add(lbl_ma_1);
+	}
+}

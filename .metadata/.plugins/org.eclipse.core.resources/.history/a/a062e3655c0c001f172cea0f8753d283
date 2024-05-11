@@ -1,0 +1,35 @@
+package app;
+
+import java.util.List;
+
+import Entities.NhanVien;
+import Entities.TaiKhoan;
+import Entities.ThucDon;
+import dao.NhanVien_DAO;
+import dao.TaiKhoan_DAO;
+import dao.ThucDon_DAO;
+
+public class readThucDon {
+	 public static void main(String[] args) {
+//	        ThucDon_DAO thucDonDAO = new ThucDon_DAO();
+//	        List<ThucDon> thucDons = thucDonDAO.getAllThucDon();
+//	        for (ThucDon thucDon : thucDons) {
+//	            System.out.println(thucDon);
+//	        }
+//	        thucDonDAO.close();
+		    
+//		    	NhanVien_DAO thucDonDAO = new NhanVien_DAO();
+//		        List<NhanVien> thucDons = thucDonDAO.getAllNhanVien();
+//		        for (NhanVien nv : thucDons) {
+//		            System.out.println(nv);
+//		        }
+//		        thucDonDAO.close();
+		 TaiKhoan_DAO thucDonDAO = new TaiKhoan_DAO();
+	        List<TaiKhoan> thucDons = thucDonDAO.getAllTaiKhoans();
+	        for (TaiKhoan nv : thucDons) {
+	            System.out.println(nv);
+	        }
+	        thucDonDAO.close();
+		    
+	    }
+}

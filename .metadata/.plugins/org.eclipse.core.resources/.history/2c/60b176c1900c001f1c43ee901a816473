@@ -1,0 +1,225 @@
+package GiaoDien;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import org.hibernate.Session;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.mail.internet.MimeMessage;
+import javax.swing.ImageIcon;
+
+
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.util.Properties;
+import java.util.Random;
+
+
+public class NhapEmail extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txt_email;
+	private JPasswordField txt_code;
+	
+	final static String from = "karaoke4t@gmail.com";
+	final static String password = "koeblhszjuoqrenq";
+	static int randomCode;
+	String[] to = {"maiqtruong2403@gmail.com", "truongdailoc2003@gmail.com", "thachgpt@gmail.com", "duongphan1912@gmail.com"};
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					NhapEmail frame = new NhapEmail();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public NhapEmail() {
+		setType(Type.UTILITY);
+		setResizable(false);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setTitle("CHANGEPASSWORD");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 800, 500);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(64, 128, 128));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(486, 0, 300, 463);
+		contentPane.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JLabel logo = new JLabel("CHANGE PASSWORD");
+		logo.setBackground(new Color(255, 255, 255));
+		logo.setEnabled(false);
+		logo.setFont(new Font("Tahoma", Font.BOLD, 25));
+		logo.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(logo, BorderLayout.NORTH);
+		
+		JPanel input_box = new JPanel();
+		input_box.setBorder(null);
+		input_box.setBackground(new Color(255, 255, 255, 100));
+		panel.add(input_box, BorderLayout.CENTER);
+		input_box.setLayout(null);
+		
+		txt_email = new JTextField();
+		txt_email.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txt_email.setBounds(56, 125, 200, 30);
+		input_box.add(txt_email);
+		txt_email.setColumns(10);
+		
+		txt_code = new JPasswordField();
+		txt_code.setBounds(56, 226, 200, 30);
+		input_box.add(txt_code);
+
+		JLabel lblNewLabel_2 = new JLabel("Email");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2.setBounds(56, 105, 89, 13);
+		input_box.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Code");
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2_1.setBounds(56, 210, 89, 13);
+		input_box.add(lblNewLabel_2_1);
+		
+		JLabel sendemail = new JLabel("Send Mail");
+		sendemail.setBackground(new Color(0, 0, 0));
+		sendemail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		sendemail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		sendemail.setHorizontalAlignment(SwingConstants.CENTER);
+		sendemail.setBounds(157, 165, 99, 30);
+		input_box.add(sendemail);
+		
+		JLabel changpass = new JLabel("Confirm Code");
+		changpass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		changpass.setHorizontalAlignment(SwingConstants.CENTER);
+		changpass.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		changpass.setBounds(157, 266, 99, 30);
+		input_box.add(changpass);
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setIcon(new ImageIcon(NhapEmail.class.getResource("/Imgs/2t_V3.2.png")));
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setBounds(88, 56, 289, 271);
+		contentPane.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel = new JLabel("2T COFFEE");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 54));
+		lblNewLabel.setBounds(68, 318, 337, 116);
+		contentPane.add(lblNewLabel);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(NhapEmail.class.getResource("/Imgs/bg-login.png")));
+		background.setBounds(0, 0, 786, 463);
+		contentPane.add(background);
+	}
+	public static boolean sendEmail(String to, String tieuDe, String noiDung) {
+		// Properties : khai báo các thuộc tính
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
+		props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+
+		// create Authenticator
+		Authenticator auth = new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				// TODO Auto-generated method stub
+				return new PasswordAuthentication(from, password);
+			}
+		};
+
+		// Phiên làm việc
+		Session session = Session.getInstance(props, auth);
+
+		// Tạo một tin nhắn
+		MimeMessage msg = new MimeMessage(session);
+
+		try {
+			Random rand = new Random();
+			randomCode = rand.nextInt(999999);
+			// Kiểu nội dung
+			msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+
+			// Người gửi
+			msg.setFrom(new InternetAddress(from));
+
+			// Người nhận
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+
+			// Tiêu đề email
+			msg.setSubject("Ma xac minh");
+
+			// Quy đinh ngày gửi
+			msg.setSentDate(new Date());
+
+			// Quy định email nhận phản hồi
+			// msg.setReplyTo(InternetAddress.parse(from, false))
+
+			// Nội dung
+			msg.setContent(noiDung, "text/HTML; charset=UTF-8"); 
+			msg.setText("Mã OTP để đổi password: "+randomCode);
+			//String message = "Your reset code is "+randomCode;
+			// "Ma reset cod is "+randomCode
+
+			// Gửi email
+			Transport.send(msg);
+            
+	        JOptionPane.showMessageDialog(null, "Gửi email thành công", "Success", JOptionPane.INFORMATION_MESSAGE);
+			return true;
+		} catch (Exception e) {
+	        JOptionPane.showMessageDialog(null, "Gặp lỗi trong quá trình gửi email", "Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+			return false;
+		}
+	}	
+	
+}

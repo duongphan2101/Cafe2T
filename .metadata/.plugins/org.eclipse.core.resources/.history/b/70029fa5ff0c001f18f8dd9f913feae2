@@ -1,0 +1,29 @@
+package app;
+
+import java.util.List;
+
+import Entities.NhanVien;
+import dao.DangNhap_DAO;
+import dao.NhanVien_DAO;
+
+public class readNhanVien {
+	 public static void main(String[] args) {
+
+		    
+//		 		NhanVien_DAO updateDao = new NhanVien_DAO();
+//		 		NhanVien nva = new NhanVien("NVAA0007", "An ", null, null, null, null, null, null, null, null, null);
+//		 		updateDao.updateNhanVien(nva);
+		 		
+//		    	NhanVien_DAO nvdao = new NhanVien_DAO();
+//		        List<NhanVien> nvs = nvdao.getAllNhanVien();
+//		        for (NhanVien nv : nvs) {
+//		            System.out.println(nv.getMaNV());
+//		        }
+//		        nvdao.close();
+
+		        NhanVien_DAO maxMa = new NhanVien_DAO();
+		        System.out.println(maxMa.getNextMaNV() + maxMa.getNextMaTK());
+
+		    
+	    }
+}

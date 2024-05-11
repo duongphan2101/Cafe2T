@@ -1,0 +1,31 @@
+package dao;
+
+import java.util.List;
+
+import Entities.TaiKhoan;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+
+public class TaiKhoan_DAO {
+	private EntityManager entityManager;
+
+    public TaiKhoan_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<TaiKhoan> getAllTaiKhoans() {
+    	TypedQuery<TaiKhoan> query = entityManager.createQuery("SELECT n FROM TaiKhoan n", TaiKhoan.class);
+        return query.getResultList();
+    }
+    
+    public TaiKhoan getNhanVienById(String maNV) {
+        return entityManager.find(TaiKhoan.class, maNV);
+    }
+    
+    public void close() {
+        entityManager.close();
+    }
+}

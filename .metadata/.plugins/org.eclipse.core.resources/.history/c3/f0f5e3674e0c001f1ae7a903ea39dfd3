@@ -1,0 +1,31 @@
+package dao;
+
+import java.util.List;
+
+import Entities.ThucDon;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+
+public class ThucDon_DAO {
+	private EntityManager entityManager;
+
+    public ThucDon_DAO() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("2t_server");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    public List<ThucDon> getAllThucDon() {
+        TypedQuery<ThucDon> query = (TypedQuery<ThucDon>) entityManager.createQuery("SELECT t FROM ThucDon t", ThucDon.class);
+        return query.getResultList();
+    }
+
+    public ThucDon getThucDonById(String maTD) {
+        return entityManager.find(ThucDon.class, maTD);
+    }
+
+    public void close() {
+        entityManager.close();
+    }
+}

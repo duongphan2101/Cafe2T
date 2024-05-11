@@ -1,0 +1,30 @@
+package GiaoDien;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.UtilDateModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Date;
+import java.util.Properties;
+
+public class DateChooserExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Date Chooser Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 200);
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel);
+        panel.setLayout(new FlowLayout());
+
+        // Tạo một UtilDateModel
+        UtilDateModel model = new UtilDateModel();
+        Properties properties = new Properties();
+
+        // Tạo JDatePicker với UtilDateModel và Properties
+        JDatePicker datePicker = new JDatePicker(model, properties);
+        panel.add(datePicker);
+
+        frame.setVisible(true);
+    }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.wb.internal.core.editor.palette.dialogs.ImportArchiveDialog">
+		<item key="x" value="522"/>
+		<item key="y" value="219"/>
+		<item key="width" value="875"/>
+		<item key="height" value="569"/>
+		<list key="HISTORY_JAR_LIST">
+			<item value="C:/Users/thien/OneDrive - MSFT/Máy tính/LAP TRINH PHAN TAN/cafe/Cafe_Client/lib/jcalendar-1.4.jar"/>
+		</list>
+	</section>
+	<section name="org.eclipse.wb.internal.core.model.property.editor.string.StringPropertyDialog">
+		<item key="x" value="3643"/>
+		<item key="y" value="636"/>
+		<item key="width" value="874"/>
+		<item key="height" value="533"/>
+	</section>
+</section>

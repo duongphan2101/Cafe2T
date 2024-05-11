@@ -1,0 +1,26 @@
+package Entities;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "TaiKhoan")
+public class TaiKhoan implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maTK;
+    private String tenTK;
+    private String MK;
+    private String email;
+    
+    @OneToOne(mappedBy = "maTK")
+    private NhanVien nhanVien;
+
+    // Constructors, getters, and setters
+}

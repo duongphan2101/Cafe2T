@@ -1,0 +1,45 @@
+package app;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import java.util.List;
+
+public class tezzzz {
+    private static final SessionFactory sessionFactory;
+
+    static {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure();
+            sessionFactory = configuration.buildSessionFactory();
+        } catch (Throwable ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static void main(String[] args) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            // Truy vấn dữ liệu từ bảng HoaDon
+            List<HoaDon> hoaDonList = session.createQuery("FROM HoaDon", HoaDon.class).getResultList();
+
+            // Xuất thông tin của từng Hóa đơn
+            for (HoaDon hoaDon : hoaDonList) {
+                System.out.println("Mã hóa đơn: " + hoaDon.getMaHD());
+                System.out.println("Ngày lập: " + hoaDon.getNgayLap());
+                System.out.println("Tiền khách trả: " + hoaDon.getTienKhachTra());
+                System.out.println("Tổng tiền: " + hoaDon.getTongTien());
+                System.out.println("Mã nhân viên: " + hoaDon.getMaNV());
+                System.out.println("Mã thành đoàn: " + hoaDon.getMaTD());
+                System.out.println("-----------------------------------");
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+

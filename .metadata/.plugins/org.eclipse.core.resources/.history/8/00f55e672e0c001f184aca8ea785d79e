@@ -1,0 +1,38 @@
+package GiaoDien;
+import javax.swing.*;
+import java.awt.*;
+
+public class MyPanelExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Java Swing Panel Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        // Tạo một panel mới
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                int shadowSize = 5; // Kích thước của shadow
+
+                // Vẽ shadow
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(0, 0, 0, 50)); // Màu shadow (màu đen với độ trong suốt)
+                g2.fillRect(shadowSize, shadowSize, getWidth() - shadowSize * 2, getHeight() - shadowSize * 2);
+                g2.dispose();
+            }
+        };
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(Color.WHITE); // Đặt màu nền cho panel
+
+        // Thêm một label vào panel
+        JLabel label = new JLabel("Hello, World!");
+        panel.add(label, BorderLayout.CENTER);
+
+        // Thêm panel vào frame
+        frame.getContentPane().add(panel);
+
+        // Hiển thị frame
+        frame.setVisible(true);
+    }
+}

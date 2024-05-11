@@ -1,0 +1,60 @@
+package Entities;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@NamedQueries({
+    @NamedQuery(name = "HoaDon.findAll", query = "SELECT c FROM HoaDon c")
+})
+@Entity
+@Table(name = "HoaDon")
+public class HoaDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maHD;
+    private String ngayLap;
+    private double tienKhachTra;
+    private double tongTien;
+
+    @ManyToOne
+    @JoinColumn(name = "maNV")
+    private NhanVien nhanVien;
+
+    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ChiTietHoaDon> danhSachChiTietHoaDon;
+
+    public HoaDon() {
+        super();
+    }
+
+    public HoaDon(String maHD, String ngayLap, double tienKhachTra, double tongTien, NhanVien nhanVien,
+            List<ChiTietHoaDon> danhSachChiTietHoaDon) {
+        super();
+        this.maHD = maHD;
+        this.ngayLap = ngayLap;
+        this.tienKhachTra = tienKhachTra;
+        this.tongTien = tongTien;
+        this.nhanVien = nhanVien;
+        this.danhSachChiTietHoaDon = danhSachChiTietHoaDon;
+    }
+
+    // Getters và setters
+
+    @Override
+    public String toString() {
+        return "HoaDon [maHD=" + maHD + ", ngayLap=" + ngayLap + ", tienKhachTra=" + tienKhachTra + ", tongTien="
+                + tongTien + ", nhanVien=" + nhanVien + ", danhSachChiTietHoaDon=" + danhSachChiTietHoaDon + "]";
+    }
+}

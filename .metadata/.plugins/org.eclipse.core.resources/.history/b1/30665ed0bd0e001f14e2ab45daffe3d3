@@ -1,0 +1,55 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Cafe_Client</groupId>
+  <artifactId>Cafe_Client</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+	  <!-- https://mvnrepository.com/artifact/org.jdatepicker/jdatepicker -->
+
+
+	  <dependency>
+	  	<groupId>Cafe_Server</groupId>
+	  	<artifactId>Cafe_Server</artifactId>
+	  	<version>0.0.1-SNAPSHOT</version>
+	  </dependency>
+
+  </dependencies>
+  
+  <build>
+  	<plugin>
+    	<groupId>org.apache.maven.plugins</groupId>
+    	<artifactId>maven-dependency-plugin</artifactId>
+    	<executions>
+	        <execution>
+	            <id>copy-dependencies</id>
+	            <phase>prepare-package</phase>
+	            <goals>
+	                <goal>copy-dependencies</goal>
+	            </goals>
+	            <configuration>
+	                <outputDirectory>
+	                    ${project.build.directory}/libs
+	                </outputDirectory>
+	            </configuration>
+	        </execution>
+    	</executions>
+	</plugin>
+	
+	<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>libs/</classpathPrefix>
+                <mainClass>
+                    com.GiaoDien.Login
+                    
+                </mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+  </build>
+</project>

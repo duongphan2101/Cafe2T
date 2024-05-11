@@ -1,0 +1,449 @@
+package GiaoDien;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.swing.table.DefaultTableModel;
+
+import Client_dao.Client_HoaDon_dao;
+import Entities.HoaDon;
+
+import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.BorderLayout;
+import javax.swing.UIManager;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+
+
+
+public class QL_HoaDon extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JLabel lblClock;
+	private Timer timer;
+
+	DefaultTableModel model;
+	private JTextField text_maHD;
+	private JTable table_1;
+	String name = User.getTenNhanVien();
+	private Client_HoaDon_dao hddao;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					QL_HoaDon frame = new QL_HoaDon();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws UnknownHostException 
+	 */
+	public QL_HoaDon() throws UnknownHostException, ClassNotFoundException, IOException {
+		setType(Type.UTILITY);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+
+		setBackground(Color.WHITE);
+		setTitle("BILL");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setBounds(100, 100, 1175, 650);
+		setResizable(false);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(null);
+
+		
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel box_clock = new JPanel();
+        box_clock.setBackground(new Color(255, 255, 255));
+        box_clock.setBounds(34, 10, 260, 50);
+        contentPane.add(box_clock);
+        box_clock.setLayout(null);
+
+        lblClock = new JLabel();
+        lblClock.setHorizontalAlignment(SwingConstants.CENTER);
+        lblClock.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblClock.setBounds(10, 0, 240, 50);
+        lblClock.setForeground(Color.BLACK);
+        box_clock.add(lblClock);
+
+        timer = new Timer(0, this);
+        timer.start();
+		
+       
+        
+		
+		
+		JPanel DangXuat = new JPanel();
+		DangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		JButton jButton_1 = new JButton("Đăng Xuất");
+		jButton_1.setBounds(990, 10, 150, 50);
+		jButton_1.setFont(new Font("Tahoma ", Font.BOLD, 14));
+		jButton_1.setBackground(new Color(255, 0, 0));
+		jButton_1.setForeground(Color.WHITE);
+		
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+			jButton_1.setContentAreaFilled(false);
+			jButton_1.setFocusPainted(false);
+			jButton_1.setOpaque(true);
+			contentPane.add(jButton_1);
+			
+					jButton_1.addMouseListener(new MouseAdapter() {
+					    @Override
+					    public void mouseEntered(MouseEvent e) {
+					        jButton_1.setBackground(Color.BLACK);
+					    }
+			
+					    @Override
+					    public void mouseExited(MouseEvent e) {
+					        jButton_1.setBackground(new Color(255, 0, 0));
+					    }
+					});
+					
+							jButton_1.addActionListener(new ActionListener() {
+							    public void actionPerformed(ActionEvent e) {
+							        if (JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất!", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							        	Login lo = new Login();
+							        	lo.setVisible(true);							          
+							            dispose();
+							        }
+							    }
+							});
+		
+
+        
+		JLabel lblquanly = new JLabel("QL:");
+		lblquanly.setForeground(Color.WHITE);
+		lblquanly.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblquanly.setBounds(878, -20, 232, 80);
+		contentPane.add(lblquanly);
+		
+		JLabel lbltenql = new JLabel("Nguyen Van A");
+		lbltenql.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ThongTienNhanVien t = new ThongTienNhanVien();
+				try {
+					t.setThongTin(name);
+					t.setVisible(true);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changFont(lbltenql, Color.cyan);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changFont(lbltenql, Color.white);
+			}
+		});
+		lbltenql.setHorizontalAlignment(SwingConstants.CENTER);
+		lbltenql.setForeground(Color.WHITE);
+		lbltenql.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lbltenql.setBounds(833, 6, 120, 80);
+		lbltenql.setText(name);
+		contentPane.add(lbltenql);
+		
+		JPanel header = new JPanel();
+		header.setBorder(UIManager.getBorder("RadioButton.border"));
+		header.setBounds(0, 0, 1161, 100);
+		header.setBackground(new Color (136, 108, 94));
+		contentPane.add(header);
+		
+		JPanel slideBar = new JPanel();
+		slideBar.setBackground(new Color(136, 108, 94));
+		slideBar.setBounds(0, 100, 217, 524);
+		contentPane.add(slideBar);
+		slideBar.setLayout(null);
+		
+		JPanel Menu = new JPanel();
+		Menu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				QL_ThucDon t;
+				try {
+					t = new QL_ThucDon();
+					t.setVisible(true);
+					dispose();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(Menu, new Color(149, 119, 104));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(Menu, new Color(136, 108, 94));
+			}
+		});
+		Menu.setBounds(0, 119, 217, 60);
+		Menu.setBorder(null);
+		Menu.setBackground(new Color(136, 108, 94));
+		slideBar.add(Menu);
+		Menu.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("Thực Đơn");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		Menu.add(lblNewLabel, BorderLayout.CENTER);
+		
+		JPanel NhanVien = new JPanel();
+		NhanVien.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				QL_NhanVien t;
+				try {
+					t = new QL_NhanVien();
+					t.setVisible(true);
+					dispose();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(NhanVien, new Color(149, 119, 104));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(NhanVien, new Color(136, 108, 94));
+			}
+		});
+		NhanVien.setBorder(null);
+		NhanVien.setBackground(new Color(136, 108, 94));
+		NhanVien.setBounds(0, 177, 217, 60);
+		slideBar.add(NhanVien);
+		NhanVien.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNhnVin = new JLabel("Nhân Viên");
+		lblNhnVin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNhnVin.setForeground(Color.WHITE);
+		lblNhnVin.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		NhanVien.add(lblNhnVin, BorderLayout.CENTER);
+		
+		JPanel HoaDon = new JPanel();
+		HoaDon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+	
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		});
+		HoaDon.setBorder(null);
+		HoaDon.setBackground(new Color(163, 130, 113));
+		HoaDon.setBounds(0, 234, 217, 60);
+		slideBar.add(HoaDon);
+		HoaDon.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblHan = new JLabel("Hóa Đơn");
+		lblHan.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHan.setForeground(Color.WHITE);
+		lblHan.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		HoaDon.add(lblHan, BorderLayout.CENTER);
+		
+		JPanel content = new JPanel();
+		content.setLayout(null);
+		content.setBackground(UIManager.getColor("Button.background"));
+		content.setBounds(215, 96, 946, 517);
+		contentPane.add(content);
+		
+		JPanel input_Menu = new JPanel();
+		input_Menu.setLayout(null);
+		input_Menu.setBackground(Color.WHITE);
+		input_Menu.setBounds(580, 0, 366, 517);
+		content.add(input_Menu);
+		
+		JLabel lblNewLabel_1 = new JLabel("Thông Tin Hóa Đơn");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblNewLabel_1.setBounds(0, 32, 366, 41);
+		input_Menu.add(lblNewLabel_1);
+		
+		text_maHD = new JTextField();
+		text_maHD.setEditable(false);
+		text_maHD.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		text_maHD.setEnabled(false);
+		text_maHD.setColumns(10);
+		text_maHD.setBounds(38, 130, 298, 30);
+		input_Menu.add(text_maHD);
+		
+		
+		
+		JLabel lblNewLabel_2 = new JLabel("Mã Hóa Đơn");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_2.setBounds(38, 95, 100, 25);
+		input_Menu.add(lblNewLabel_2);
+		
+		JButton btn_XemChiTiet = new JButton("Chi Tiết");
+		btn_XemChiTiet.setForeground(Color.WHITE);
+		btn_XemChiTiet.setBackground(Color.LIGHT_GRAY);
+		btn_XemChiTiet.setBounds(38, 210, 298, 40);
+		input_Menu.add(btn_XemChiTiet);
+		btn_XemChiTiet.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Mau_HoaDon chiTietHoaDon = new Mau_HoaDon();
+				int row = table_1.getSelectedRow();
+				String ma = model.getValueAt(row, 0).toString();
+				try {
+					chiTietHoaDon.setHoaDon(ma);
+					chiTietHoaDon.setVisible(true);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 10, 581, 507);
+		content.add(scrollPane);
+		
+		table_1 = new JTable();
+		model = new DefaultTableModel();
+		scrollPane.setViewportView(table_1);
+		
+		model.addColumn("Mã Hóa Đơn");
+		model.addColumn("Ngày Lập");
+		model.addColumn("Tiền Khách Trả");
+		model.addColumn("Tổng Tiền");
+		model.addColumn("Tên Nhân Viên");
+		table_1.setModel(model);
+		
+		table_1.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int row = table_1.getSelectedRow();
+				text_maHD.setText(model.getValueAt(row, 0).toString());
+			}
+		});
+//		
+		
+		loadTB();
+	}
+	
+	private void changeColor(JPanel p, Color color) {
+		p.setBackground(color);
+	}
+//	
+//	private void changFont(JPanel p, Font f) {
+//		p.setFont(f);
+//	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == timer) {
+            // Cập nhật thời gian
+            updateClock();
+        }
+	}
+    private void updateClock() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH)+1;
+        int year = cal.get(Calendar.YEAR);
+        
+        String ampm;
+        if (hour >= 12) {
+            ampm = "PM";
+            if (hour > 24) {
+                hour -= 12;
+            }
+        } else {
+            ampm = "AM";
+            if (hour == 0) {
+                hour = 12;
+            }
+        }
+        
+        String time = String.format("%02d:%02d:%02d %s  %04d/%02d/%02d", hour, minute, second, ampm, year, month, day);
+        lblClock.setText(time);
+    }
+    
+    public void loadTB() throws UnknownHostException, IOException, ClassNotFoundException {
+    	Socket socket = new Socket("192.168.1.141", 6666);
+    	hddao = new Client_HoaDon_dao(socket);
+        List<HoaDon> hds = hddao.getAllHoaDon();
+        for (HoaDon hd : hds) {
+            Object [] data = {hd.getMaHD(), hd.getNgayLap(), hd.getTienKhachTra(), hd.getTongTien(), hd.getNhanVien().getTenNV()};
+            model.addRow(data);
+        } 
+    }
+    
+	private void changFont(JLabel p, Color c) {
+		p.setForeground(c);
+	}
+}

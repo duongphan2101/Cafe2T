@@ -1,0 +1,99 @@
+package Entities;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "TaiKhoan")
+public class TaiKhoan implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maTK;
+    private String tenTK;
+    private String MK;
+    private NhanVien tenNV;
+    private String email;
+    
+    @OneToOne(mappedBy = "maTK")
+    private NhanVien nhanVien;
+
+	public TaiKhoan() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public TaiKhoan(String maTK, String tenTK, String mK, NhanVien tenNV, String email, NhanVien nhanVien) {
+		super();
+		this.maTK = maTK;
+		this.tenTK = tenTK;
+		this.MK = mK;
+		this.tenNV = tenNV;
+		this.email = email;
+		this.nhanVien = nhanVien;
+	}
+
+	public String getMaTK() {
+		return maTK;
+	}
+
+	public void setMaTK(String maTK) {
+		this.maTK = maTK;
+	}
+
+	public String getTenTK() {
+		return tenTK;
+	}
+
+	public void setTenTK(String tenTK) {
+		this.tenTK = tenTK;
+	}
+
+	public String getMK() {
+		return MK;
+	}
+
+	public void setMK(String mK) {
+		MK = mK;
+	}
+
+	public NhanVien getTenNV() {
+		return tenNV;
+	}
+
+	public void setTenNV(NhanVien tenNV) {
+		this.tenNV = tenNV;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}
+
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "TaiKhoan [maTK=" + maTK + ", tenTK=" + tenTK + ", MK=" + MK + ", tenNV=" + tenNV + ", email=" + email
+				+ ", nhanVien=" + nhanVien + "]";
+	}
+
+}

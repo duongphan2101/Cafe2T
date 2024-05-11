@@ -1,0 +1,96 @@
+package Entities;
+
+import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+
+
+@NamedQueries({
+    @NamedQuery(name = "HoaDon.findAll", query = "SELECT c FROM HoaDon c")
+})
+@Entity
+@Table(name = "HoaDon")
+public class HoaDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maHD;
+    private String ngayLap;
+    private double tienKhachTra;
+    private double tongTien;
+
+    @ManyToOne
+    @JoinColumn(name = "maNV")
+    private NhanVien nhanVien;
+
+    public HoaDon() {
+        super();
+    }
+
+    public HoaDon(String maHD, String ngayLap, double tienKhachTra, double tongTien, NhanVien nhanVien) {
+        super();
+        this.maHD = maHD;
+        this.ngayLap = ngayLap;
+        this.tienKhachTra = tienKhachTra;
+        this.tongTien = tongTien;
+        this.nhanVien = nhanVien;
+    }
+
+
+    public String getMaHD() {
+		return maHD;
+	}
+
+	public void setMaHD(String maHD) {
+		this.maHD = maHD;
+	}
+
+	public String getNgayLap() {
+		return ngayLap;
+	}
+
+	public void setNgayLap(String ngayLap) {
+		this.ngayLap = ngayLap;
+	}
+
+	public double getTienKhachTra() {
+		return tienKhachTra;
+	}
+
+	public void setTienKhachTra(double tienKhachTra) {
+		this.tienKhachTra = tienKhachTra;
+	}
+
+	public double getTongTien() {
+		return tongTien;
+	}
+
+	public void setTongTien(double tongTien) {
+		this.tongTien = tongTien;
+	}
+
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}
+
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+	}
+
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+    public String toString() {
+        return "HoaDon [maHD=" + maHD + ", ngayLap=" + ngayLap + ", tienKhachTra=" + tienKhachTra + ", tongTien="
+                + tongTien + ", nhanVien=" + nhanVien + ", danhSachChiTietHoaDon=" + "]";
+    }
+}

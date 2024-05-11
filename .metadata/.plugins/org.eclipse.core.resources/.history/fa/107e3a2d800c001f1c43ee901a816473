@@ -1,0 +1,23 @@
+package GiaoDien;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeUtils {
+    public static String getDateTime() {
+        // Lấy ngày giờ hiện tại
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        
+        // Định dạng ngày giờ
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        
+        // Chuyển đổi thành chuỗi và trả về
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
+
+    public static void main(String[] args) {
+        // Sử dụng hàm getDateTime để lấy ngày giờ và in ra màn hình
+        String currentDateTime = getDateTime();
+        System.out.println("Ngày giờ hiện tại: " + currentDateTime);
+    }
+}

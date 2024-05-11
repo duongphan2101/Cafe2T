@@ -1,0 +1,22 @@
+package Entities;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "ThucDon")
+public class ThucDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String maTD;
+    private double donGia;
+    private String tenThucDon;
+
+    // Constructors, getters, and setters
+}

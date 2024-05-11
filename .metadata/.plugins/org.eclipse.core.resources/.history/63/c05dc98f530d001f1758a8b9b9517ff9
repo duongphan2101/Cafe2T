@@ -1,0 +1,250 @@
+package GiaoDien;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import Client_dao.Client_NhanVien_dao;
+import Entities.NhanVien;
+import dao.User;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.HeadlessException;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.JPasswordField;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.Socket;
+import java.util.List;
+
+public class Login extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txtusername;
+	private JPasswordField txtpass;
+	private static String name;
+	private Client_NhanVien_dao clienNhanVienDao;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login frame = new Login(name);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Login(String name) {
+		setType(Type.UTILITY);
+		setResizable(false);
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setTitle("\nLOGIN\r\n");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 800, 500);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(64, 128, 128));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(486, 0, 300, 463);
+		contentPane.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JLabel logo = new JLabel("\r\nLOGIN");
+		logo.setBackground(new Color(255, 255, 255));
+		logo.setEnabled(false);
+		logo.setFont(new Font("Tahoma", Font.BOLD, 48));
+		logo.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(logo, BorderLayout.NORTH);
+		
+		JPanel input_box = new JPanel();
+		input_box.setBorder(null);
+		input_box.setBackground(new Color(255, 255, 255, 100));
+		panel.add(input_box, BorderLayout.CENTER);
+		input_box.setLayout(null);
+		
+		txtusername = new JTextField();
+		txtusername.setBounds(58, 76, 200, 30);
+		input_box.add(txtusername);
+		txtusername.setColumns(10);
+		txtusername.requestFocus();
+		
+		txtpass = new JPasswordField();
+		txtpass.setBounds(58, 177, 200, 30);
+		input_box.add(txtpass);
+		
+		JPanel btn_dn = new JPanel();
+		
+		 KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+	        btn_dn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(enter, "ENTER");
+	        btn_dn.getActionMap().put("ENTER", new AbstractAction() {
+	            /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				@Override
+	            public void actionPerformed(ActionEvent e) {
+					String username = txtusername.getText();
+					char[] pass = txtpass.getPassword();
+					String newpass = new String(pass);
+					if(username.isEmpty() || newpass.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Nhập Tài Khoản và Mật Khẩu!");
+					}else {
+						try {
+							dangNhap(username, newpass);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					
+	            }
+	        });
+
+		
+		btn_dn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String username = txtusername.getText();
+				char[] pass = txtpass.getPassword();
+				String newpass = new String(pass);
+				try {
+					dangNhap(username, newpass);
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				changeColor(btn_dn, new Color(64, 128, 128), new Color(0, 0 ,0));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				changeColor(btn_dn, new Color(0, 0, 0), new Color(255, 255, 255));
+			}
+		});
+		btn_dn.setBackground(new Color(0, 0, 0));
+		btn_dn.setForeground(new Color(255, 255, 255));
+		btn_dn.setBounds(29, 288, 250, 40);
+		input_box.add(btn_dn);
+		
+		JLabel lblNewLabel_1 = new JLabel("Login");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
+		btn_dn.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("User Name");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2.setBounds(58, 56, 89, 13);
+		input_box.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Pass Word");
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2_1.setBounds(58, 161, 89, 13);
+		input_box.add(lblNewLabel_2_1);
+		
+		JLabel lblNewLabel_3 = new JLabel("Foget Password");
+		lblNewLabel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				NhapEmail t = new NhapEmail();
+//				t.setVisible(true);
+//				dispose();
+			}
+		});
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_3.setBounds(121, 217, 137, 13);
+		input_box.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setIcon(new ImageIcon(Login.class.getResource("/Imgs/2t_V3.2.png")));
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setBounds(88, 56, 289, 271);
+		contentPane.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel = new JLabel("2T COFFEE");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 54));
+		lblNewLabel.setBounds(68, 318, 337, 116);
+		contentPane.add(lblNewLabel);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(Login.class.getResource("/Imgs/bg-login.png")));
+		background.setBounds(0, 0, 786, 463);
+		contentPane.add(background);
+	}
+	
+	private void changeColor(JPanel p, Color color, Color color2) {
+		p.setBackground(color);
+		p.setForeground(color2);
+	}
+	
+	
+	private void dangNhap(String tk, String mk) throws HeadlessException, Exception {
+		Socket socket = new Socket("127.0.0.1", 7777);
+		clienNhanVienDao = new Client_NhanVien_dao(socket);
+		
+		if(clienNhanVienDao.getNVbyTKandMK(tk, mk)) {
+			List<NhanVien> nvs = clienNhanVienDao.getNVbyTK(tk);
+			for(NhanVien nv : nvs) {
+				Object t [] = {nv.gettK(), nv.getmK(), nv.getTenNV()};
+				name = t[2]+"";
+				User.setTenNhanVien(name);
+				if(t[0].equals("TK001") && t[1].equals("123")) {
+					JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+					QL_ThucDon n = new QL_ThucDon();
+					n.setVisible(true);
+					dispose();
+				}else {
+					Order o = new Order();
+					JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+					o.setVisible(true);
+					dispose();
+				}
+			}	
+		} else {
+			JOptionPane.showMessageDialog(null, "Đăng nhập Thất Bại");
+		}
+        
+	}
+}

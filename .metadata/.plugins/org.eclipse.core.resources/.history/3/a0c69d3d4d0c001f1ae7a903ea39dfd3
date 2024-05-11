@@ -1,0 +1,17 @@
+package app;
+
+import java.util.List;
+
+import Entities.ThucDon;
+import dao.ThucDon_DAO;
+
+public class readThucDon {
+	 public static void main(String[] args) {
+	        ThucDon_DAO thucDonDAO = new ThucDon_DAO();
+	        List<ThucDon> thucDons = thucDonDAO.getAllThucDon();
+	        for (ThucDon thucDon : thucDons) {
+	            System.out.println(thucDon.toString());
+	        }
+	        thucDonDAO.close();
+	    }
+}

@@ -1,0 +1,74 @@
+package Entities;
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "ChiTietHoaDon")
+public class ChiTietHoaDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "maHD")
+    private HoaDon hoaDon;
+    
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "maTD")
+    private ThucDon thucDon;
+
+    private int soLuong;
+
+    public ChiTietHoaDon() {
+        super();
+    }
+
+    public ChiTietHoaDon(HoaDon hoaDon, ThucDon thucDon, int soLuong) {
+        super();
+        
+        this.hoaDon = hoaDon;
+        this.thucDon = thucDon;
+        this.soLuong = soLuong;
+    }
+
+    public HoaDon getHoaDon() {
+		return hoaDon;
+	}
+
+	public void setHoaDon(HoaDon hoaDon) {
+		this.hoaDon = hoaDon;
+	}
+
+	public ThucDon getThucDon() {
+		return thucDon;
+	}
+
+	public void setThucDon(ThucDon thucDon) {
+		this.thucDon = thucDon;
+	}
+
+	public int getSoLuong() {
+		return soLuong;
+	}
+
+	public void setSoLuong(int soLuong) {
+		this.soLuong = soLuong;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+    public String toString() {
+        return "ChiTietHoaDon [hoaDon=" + hoaDon + ", thucDon=" + thucDon + ", soLuong=" + soLuong + "]";
+    }
+}
+

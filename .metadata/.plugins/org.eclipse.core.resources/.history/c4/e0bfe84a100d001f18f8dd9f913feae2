@@ -1,0 +1,44 @@
+package Entities;
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "ChiTietHoaDon")
+public class ChiTietHoaDon implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @OneToOne
+    @JoinColumn(name = "maHD")
+    private HoaDon hoaDon;
+
+    @ManyToOne
+    @JoinColumn(name = "maTD")
+    private ThucDon thucDon;
+
+    private int soLuong;
+
+    public ChiTietHoaDon() {
+        super();
+    }
+
+    public ChiTietHoaDon(HoaDon hoaDon, ThucDon thucDon, int soLuong) {
+        super();
+        this.hoaDon = hoaDon;
+        this.thucDon = thucDon;
+        this.soLuong = soLuong;
+    }
+
+    // Getters và setters
+
+    @Override
+    public String toString() {
+        return "ChiTietHoaDon [id=" + id + ", hoaDon=" + hoaDon + ", thucDon=" + thucDon + ", soLuong=" + soLuong + "]";
+    }
+}
+

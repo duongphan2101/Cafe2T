@@ -1,0 +1,40 @@
+package app;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+import Entities.HoaDon;
+import Services.EntityManagerCreate;
+import Services.HoaDon_Service;
+
+import java.util.List;
+
+public class tezzzz {
+    
+    public static void main(String[] args) {
+    	 EntityManagerCreate entityManagerCreate = new EntityManagerCreate();
+
+         // Tạo đối tượng HoaDon_Service với EntityManagerCreate đã tạo
+         HoaDon_Service hoaDonService = new HoaDon_Service(entityManagerCreate);
+
+         // Gọi phương thức findAll()
+         List<HoaDon> hoaDonList = hoaDonService.findAll();
+
+         // In thông tin của từng Hóa đơn
+         for (HoaDon hoaDon : hoaDonList) {
+             System.out.println("Mã hóa đơn: " + hoaDon.getMaHD());
+             System.out.println("Ngày lập: " + hoaDon.getNgayLap());
+             System.out.println("Tiền khách trả: " + hoaDon.getTienKhachTra());
+             System.out.println("Tổng tiền: " + hoaDon.getTongTien());
+             System.out.println("Mã nhân viên: " + hoaDon.getNhanVien().getMaNV());
+             System.out.println("Mã thành đoàn: " + hoaDon.getThucDon().getMaTD());
+             System.out.println("-----------------------------------");
+         }
+
+         // Đóng EntityManager
+         entityManagerCreate.closeEnManager();
+         entityManagerCreate.closeEnManagerFactory();
+    }
+}
+

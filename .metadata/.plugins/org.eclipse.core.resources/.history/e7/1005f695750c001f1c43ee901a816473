@@ -1,0 +1,12 @@
+package app;
+
+import Services.EntityManagerCreate;
+
+public class main {
+	
+	public static void main(String[] args) {
+		EntityManagerCreate mangerFactoryUtil = new EntityManagerCreate();
+
+	}
+
+}
